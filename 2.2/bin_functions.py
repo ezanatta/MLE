@@ -194,7 +194,7 @@ def bin_areafix(RA, DEC, V, galcenter, pa, i, nbins, op):         #Work in progr
      
 def galaxy_inputs(gal):
     galinput = 'N'+gal+'input.dat'
-    galinput = '/home/emilio/MLE/Galaxies/'+gal+'/'+galinput
+    galinput = '../Galaxies/'+gal+'/'+galinput
     
     return galinput
     

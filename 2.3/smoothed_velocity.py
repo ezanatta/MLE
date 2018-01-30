@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import ticker
 import sys
-sys.path.insert(0, '/home/emilio/MLE/2.2/')
+sys.path.insert(0, '../2.2/')
 from bin_functions import galaxy_inputs
 from scipy import stats
 from astropy.io import fits
@@ -15,8 +15,8 @@ def plot_vmap_singleplot(path, vn):
     hdu = hdu_list[0]
     wcs = WCS(hdu.header)
     
-    DRA = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
-    DDEC = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))
+    DRA = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
+    DDEC = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))
     
     coords = zip(DRA, DDEC)
     
@@ -64,11 +64,11 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         
         gal = gals[j]
     
-        DRA = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
-        DDEC = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))    
+        DRA = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
+        DDEC = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))    
         
-        col1 = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(4,))
-        col2 = np.loadtxt('/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(5,))
+        col1 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(4,))
+        col2 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(5,))
         col = col1 - col2
         
         n = len(vn[j])
@@ -93,7 +93,7 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         vnrs.append(vnr)
         
           
-    vcmaps, vrcmaps, vbcmaps, Vmins, Vmaxs, ras, decs, rars, decrs, rabs, decbs, hdus = [],[],[],[],[],[],[],[],[],[],[],[]
+    vcmaps, vrcmaps, vbcmaps, Vmins, Vmaxs, ras, decs, rars, decrs, rabs, decbs, hdus, coords_s = [],[],[],[],[],[],[],[],[],[],[],[],[]
     
     for k in range(0, len(gals)):
         
@@ -101,7 +101,7 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         coords_blue = zip(RAb[k], DECb[k])
         coords_red = zip(RAr[k], DECr[k])
         
-        fits_file = '/home/emilio/MLE/Galaxies/'+gals[j]+'/'+'fits-null.fits'
+        fits_file = '../Galaxies/'+gals[j]+'/'+'fits-null.fits'
         hdu = fits.open(fits_file)[0]
         wcs = WCS(hdu.header)
         
@@ -130,9 +130,9 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         print 'number of blues:',len(rab)
         print 'number of reds:', len(rar)
         
-        vcmap = vn - np.mean(vn)
-        vrcmap = vnr - np.mean(vnr)
-        vbcmap = vnb - np.mean(vnb)
+        vcmap = vn[k] - np.mean(vn[k])
+        vrcmap = vnrs[k] - np.mean(vnrs[k])
+        vbcmap = vnbs[k] - np.mean(vnbs[k])
     
         Vmin = max(vcmap)
         Vmax = min(vcmap)
@@ -149,38 +149,39 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         rars.append(rars)
         decrs.append(decr)
         hdus.append(hdu.data)
+        coords_s.append(coords)
     
     f, ax = plt.subplots(3, 3, projection=wcs) 
     
     for l in range(0, len(gals)):
         
         #fig1 = plt.subplot(1, 3, 1, projection=wcs)
-        ax[.imshow(hdu.data, origin='lower',cmap='gray_r')
-        plt.scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        decx = fig1.coords[1]
+        ax[l][1].imshow(hdu.data, origin='lower',cmap='gray_r')
+        ax[l][1].scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        decx = f.coords_s[l][1]
         decx.set_axislabel('DEC')
-        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        ax[l][1].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        ax[l][1].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
         
         #fig2 = plt.subplot(1, 3, 2, projection=wcs)
-        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-        plt.scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        rax = fig2.coords[0]
+        ax[l][2].imshow(hdu.data, origin='lower',cmap='gray_r')
+        ax[l][2].scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        rax = f.coords[l][0]
         rax.set_axislabel('RA')
-        decx = fig2.coords[1]
+        decx = f.coords[l][1]
         decx.set_ticklabel_visible(False)
-        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        ax[l][2].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        ax[l][2].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
         
         #fig3 = plt.subplot(1, 3, 3, projection=wcs)
-        decx = fig3.coords[1]
+        decx = f.coords[l][1]
         decx.set_ticklabel_visible(False)
-        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-        p3 = plt.scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
-        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
-        cax,kw = mpl.colorbar.make_axes(fig3.axes, fraction=0.047, shrink=1.0, pad=0.07)
-        cb = plt.colorbar(p3, cax=cax, **kw)
+        ax[l][3].imshow(hdu.data, origin='lower',cmap='gray_r')
+        p3 = ax[l][3].scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
+        ax[l][3].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        ax[l][3].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
+        cax,kw = mpl.colorbar.make_axes(f.axes, fraction=0.047, shrink=1.0, pad=0.07)
+        cb = ax[l][3].colorbar(p3, cax=cax, **kw)
         tick_locator = ticker.MaxNLocator(nbins=5)
         cb.locator = tick_locator
         cb.update_ticks()
@@ -279,10 +280,10 @@ for gal in galaxies:
     
     c_seps.append(float(inp[4]))   #colour separation
     
-    galcat = '/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat'
+    galcat = '../Galaxies/'+gal+'/'+'N'+gal+'GC.dat'
     galcats.append(galcat)
     
-    paths.append('/home/emilio/MLE/Galaxies/'+gal+'/') 
+    paths.append('../Galaxies/'+gal+'/') 
 
     
     RAg, DECg, V = read_catalog_gc(galcat)
