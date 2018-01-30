@@ -1,0 +1,19 @@
+to do list for prob_bulge.f
+
+-> characterize and correct input files on .f code
+   -> "2768_complete_clean_dec.dat" is the spec catalog 
+   -> ffile is ok
+   -> input is ok 
+   -> table.dat is already on 2.5 folder
+	
+   -> "bin_2768.dat" is bin_.dat 
+   -> "likelihood_2768.dat" is like_.dat 	
+
+   -> "unliky.dat" is an output file (the main one)
+   -> "all.dat" is not used anywhere
+   -> "for_lodo.dat" is an output file
+   -> "bin_vp.dat" is an output file
+
+   -> "bin_rej.dat" is an output file	
+
+-> on line 147 ra*3600, not sure about this

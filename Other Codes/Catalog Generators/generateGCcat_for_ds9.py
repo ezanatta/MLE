@@ -1,0 +1,40 @@
+lines = []
+
+rah = []
+ram = []
+ras = []
+decd = []
+decm = []
+decs = []
+
+ra = []
+dec = []
+
+gal = raw_input('enter galaxy number: ')
+
+path = '/home/emilio/MLE/Galaxies/'+gal+'/' 
+cat = path+'N'+gal+'GC.dat'
+
+with open(cat, 'r') as cat:
+    for column in cat:
+        lines.append(column)
+        
+    for i in range(0,len(lines)-1):
+        print i
+        rah.append(lines[i][0]+':')
+        ram.append(lines[i][2]+lines[i][3]+':')
+        ras.append(lines[i][5]+lines[i][6])
+        decd.append('+'+lines[i][11]+lines[i][12]+':')
+        decm.append(lines[i][14]+':')
+        decs.append(lines[i][16]+lines[i][17])
+    
+    for i in range(0,len(lines)-1):
+        ra.append(rah[i]+ram[i]+ras[i])
+        dec.append(decd[i]+decm[i]+decs[i])
+
+out = path+'N'+gal+'GC.reg'
+
+with open(out, 'w') as o:
+    for i in range(0,len(ra)):
+        print >>o, ra[i], dec[i]
+

@@ -1,0 +1,605 @@
+#K IRAF       = NOAO/IRAFV2.16          version    %-23s     
+#K USER       = ana                     name       %-23s     
+#K HOST       = pluto                   computer   %-23s     
+#K DATE       = 2016-11-29              yyyy-mm-dd %-23s     
+#K TIME       = 09:55:15                hh:mm:ss   %-23s     
+#K PACKAGE    = apphot                  name       %-23s     
+#K TASK       = phot                    name       %-23s     
+#
+#K SCALE      = 1.                      units      %-23.7g   
+#K FWHMPSF    = 2.92                    scaleunit  %-23.7g   
+#K EMISSION   = yes                     switch     %-23b     
+#K DATAMIN    = -100.                   counts     %-23.7g   
+#K DATAMAX    = 100000.                 counts     %-23.7g   
+#K EXPOSURE   = EXPOSURE                keyword    %-23s     
+#K AIRMASS    = AIRMASS                 keyword    %-23s     
+#K FILTER     = ""                      keyword    %-23s     
+#K OBSTIME    = ""                      keyword    %-23s     
+#
+#K NOISE      = poisson                 model      %-23s     
+#K SIGMA      = 0.                      counts     %-23.7g   
+#K GAIN       = GAIN                    keyword    %-23s     
+#K EPADU      = 1.                      e-/adu     %-23.7g   
+#K CCDREAD    = RDNOISE                 keyword    %-23s     
+#K READNOISE  = 0.                      e-         %-23.7g   
+#
+#K CALGORITHM = none                    algorithm  %-23s     
+#K CBOXWIDTH  = 0.                      scaleunit  %-23.7g   
+#K CTHRESHOLD = 0.                      sigma      %-23.7g   
+#K MINSNRATIO = 1.                      number     %-23.7g   
+#K CMAXITER   = 0                       number     %-23d     
+#K MAXSHIFT   = 0.                      scaleunit  %-23.7g   
+#K CLEAN      = no                      switch     %-23b     
+#K RCLEAN     = 0.                      scaleunit  %-23.7g   
+#K RCLIP      = 0.                      scaleunit  %-23.7g   
+#K KCLEAN     = 0.                      sigma      %-23.7g   
+#
+#K SALGORITHM = constant                algorithm  %-23s     
+#K ANNULUS    = 10.                     scaleunit  %-23.7g   
+#K DANNULUS   = 10.                     scaleunit  %-23.7g   
+#K SKYVALUE   = 0.                      counts     %-23.7g   
+#K KHIST      = 3.                      sigma      %-23.7g   
+#K BINSIZE    = 0.1                     sigma      %-23.7g   
+#K SMOOTH     = no                      switch     %-23b     
+#K SMAXITER   = 10                      number     %-23d     
+#K SLOCLIP    = 0.                      percent    %-23.7g   
+#K SHICLIP    = 0.                      percent    %-23.7g   
+#K SNREJECT   = 50                      number     %-23d     
+#K SLOREJECT  = 3.                      sigma      %-23.7g   
+#K SHIREJECT  = 3.                      sigma      %-23.7g   
+#K RGROW      = 0.                      scaleunit  %-23.7g   
+#
+#K WEIGHTING  = constant                model      %-23s     
+#K APERTURES  = 1.8                     scaleunit  %-23s     
+#K ZMAG       = 20.                     zeropoint  %-23.7g   
+#
+#N IMAGE               XINIT     YINIT     ID    COORDS                 LID    \
+#U imagename           pixels    pixels    ##    filename               ##     \
+#F %-23s               %-10.3f   %-10.3f   %-6d  %-23s                  %-6d    
+#
+#N XCENTER    YCENTER    XSHIFT  YSHIFT  XERR    YERR            CIER CERROR   \
+#U pixels     pixels     pixels  pixels  pixels  pixels          ##   cerrors  \
+#F %-14.3f    %-11.3f    %-8.3f  %-8.3f  %-8.3f  %-15.3f         %-5d %-9s      
+#
+#N MSKY           STDEV          SSKEW          NSKY   NSREJ     SIER SERROR   \
+#U counts         counts         counts         npix   npix      ##   serrors  \
+#F %-18.7g        %-15.7g        %-15.7g        %-7d   %-9d      %-5d %-9s      
+#
+#N ITIME          XAIRMASS       IFILTER                OTIME                  \
+#U timeunit       number         name                   timeunit               \
+#F %-18.7g        %-15.7g        %-23s                  %-23s                   
+#
+#N RAPERT   SUM           AREA       FLUX          MAG    MERR   PIER PERROR   \
+#U scale    counts        pixels     counts        mag    mag    ##   perrors  \
+#F %-12.2f  %-14.7g       %-11.7g    %-14.7g       %-7.3f %-6.3f %-5d %-9s      
+#
+snb.fits               208.824   319.146   1     2MASS.GC.cat           1      \
+   208.824    319.146    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.237562      10.37576   1.237562      19.769 0.976 0    NoError    
+snb.fits               293.563   411.249   2     2MASS.GC.cat           2      \
+   293.563    411.249    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     6.851219      10.40512   6.851219      17.911 0.415 0    NoError    
+snb.fits               478.856   309.783   3     2MASS.GC.cat           3      \
+   478.856    309.783    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.761829      10.40903   2.761829      18.897 0.653 0    NoError    
+snb.fits               331.024   205.134   4     2MASS.GC.cat           4      \
+   331.024    205.134    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.5439226     10.34978   0.5439226     20.661 1.472 0    NoError    
+snb.fits               262.519   385.516   5     2MASS.GC.cat           5      \
+   262.519    385.516    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.022801      10.46456   4.0228        18.489 0.541 0    NoError    
+snb.fits               294.653   505.374   6     2MASS.GC.cat           6      \
+   294.653    505.374    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.65505       10.41594   1.65505       19.453 0.844 0    NoError    
+snb.fits               197.013   379.608   7     2MASS.GC.cat           7      \
+   197.013    379.608    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.534574      10.5277    1.534574      19.535 0.876 0    NoError    
+snb.fits               26.986    445.992   8     2MASS.GC.cat           8      \
+   26.986     445.992    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.2534794     10.25408   0.2534794     21.490 2.156 0    NoError    
+snb.fits               547.632   422.078   9     2MASS.GC.cat           9      \
+   547.632    422.078    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     3.397093      10.51179   3.397093      18.672 0.589 0    NoError    
+snb.fits               138.653   270.348   10    2MASS.GC.cat           10     \
+   138.653    270.348    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.4590345     10.42174   0.4590344     20.845 1.602 0    NoError    
+snb.fits               411.050   220.096   11    2MASS.GC.cat           11     \
+   411.050    220.096    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.6930997     10.30032   0.6930997     20.398 1.304 0    NoError    
+snb.fits               395.047   522.633   12    2MASS.GC.cat           12     \
+   395.047    522.633    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.958957      10.51725   1.958957      19.270 0.776 0    NoError    
+snb.fits               603.176   640.893   13    2MASS.GC.cat           13     \
+   603.176    640.893    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.2224665     10.38684   0.2224665     21.632 2.302 0    NoError    
+snb.fits               526.228   507.948   14    2MASS.GC.cat           14     \
+   526.228    507.948    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.623982      10.44199   1.623982      19.474 0.852 0    NoError    
+snb.fits               501.727   441.993   15    2MASS.GC.cat           15     \
+   501.727    441.993    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     6.165195      10.47815   6.165195      18.025 0.437 0    NoError    
+snb.fits               499.965   425.577   16    2MASS.GC.cat           16     \
+   499.965    425.577    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.874889      10.53341   7.874889      17.759 0.387 0    NoError    
+snb.fits               487.023   492.980   17    2MASS.GC.cat           17     \
+   487.023    492.980    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.784208      10.25261   2.784208      18.888 0.651 0    NoError    
+snb.fits               486.904   631.788   18    2MASS.GC.cat           18     \
+   486.904    631.788    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.329411      10.41905   0.329411      21.206 1.892 0    NoError    
+snb.fits               178.691   365.788   19    2MASS.GC.cat           19     \
+   178.691    365.788    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.180992      10.43585   1.180992      19.819 0.999 0    NoError    
+snb.fits               163.428   258.584   20    2MASS.GC.cat           20     \
+   163.428    258.584    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.4954905     10.44443   0.4954905     20.762 1.542 0    NoError    
+snb.fits               426.860   362.033   21    2MASS.GC.cat           21     \
+   426.860    362.033    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     21.83084      10.36101   21.83084      16.652 0.232 0    NoError    
+snb.fits               349.659   355.265   22    2MASS.GC.cat           22     \
+   349.659    355.265    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     13.27408      10.43538   13.27408      17.192 0.298 0    NoError    
+snb.fits               290.597   355.841   23    2MASS.GC.cat           23     \
+   290.597    355.841    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     5.148727      10.48957   5.148727      18.221 0.478 0    NoError    
+snb.fits               264.280   368.902   24    2MASS.GC.cat           24     \
+   264.280    368.902    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     3.83966       10.46343   3.83966       18.539 0.554 0    NoError    
+snb.fits               340.157   393.915   25    2MASS.GC.cat           25     \
+   340.157    393.915    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     24.31195      10.37344   24.31195      16.535 0.220 0    NoError    
+snb.fits               624.233   123.652   26    2MASS.GC.cat           26     \
+   624.233    123.652    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.1263157     10.44143   0.1263157     22.246 3.055 0    NoError    
+snb.fits               550.318   146.127   27    2MASS.GC.cat           27     \
+   550.318    146.127    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.1986005     10.46932   0.1986005     21.755 2.436 0    NoError    
+snb.fits               488.569   357.749   28    2MASS.GC.cat           28     \
+   488.569    357.749    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     6.60959       10.40774   6.60959       17.950 0.422 0    NoError    
+snb.fits               368.687   482.021   29    2MASS.GC.cat           29     \
+   368.687    482.021    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.676922      10.49816   4.676921      18.325 0.502 0    NoError    
+snb.fits               205.792   600.119   30    2MASS.GC.cat           30     \
+   205.792    600.119    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.2886678     10.41011   0.2886679     21.349 2.021 0    NoError    
+snb.fits               50.366    539.538   31    2MASS.GC.cat           31     \
+   50.366     539.538    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.1968243     10.43192   0.1968243     21.765 2.447 0    NoError    
+snb.fits               404.940   317.660   32    2MASS.GC.cat           32     \
+   404.940    317.660    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     5.218927      10.50541   5.218927      18.206 0.475 0    NoError    
+snb.fits               442.680   325.040   33    2MASS.GC.cat           33     \
+   442.680    325.040    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     5.352579      10.49954   5.352579      18.179 0.469 0    NoError    
+snb.fits               388.737   334.554   34    2MASS.GC.cat           34     \
+   388.737    334.554    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     8.819877      10.39382   8.819878      17.636 0.366 0    NoError    
+snb.fits               333.814   398.112   35    2MASS.GC.cat           35     \
+   333.814    398.112    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     19.97428      10.3947    19.97428      16.749 0.243 0    NoError    
+snb.fits               296.127   409.917   36    2MASS.GC.cat           36     \
+   296.127    409.917    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.25629       10.3436    7.25629       17.848 0.403 0    NoError    
+snb.fits               293.710   447.720   37    2MASS.GC.cat           37     \
+   293.710    447.720    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.384745      10.432     4.384746      18.395 0.518 0    NoError    
+snb.fits               517.871   479.660   38    2MASS.GC.cat           38     \
+   517.871    479.660    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.742845      10.47805   2.742845      18.904 0.656 0    NoError    
+snb.fits               473.537   454.334   39    2MASS.GC.cat           39     \
+   473.537    454.334    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.472389      10.41517   7.472389      17.816 0.397 0    NoError    
+snb.fits               166.705   430.448   40    2MASS.GC.cat           40     \
+   166.705    430.448    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.965894      10.39367   0.965894      20.038 1.105 0    NoError    
+snb.fits               127.543   412.368   41    2MASS.GC.cat           41     \
+   127.543    412.368    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.6787088     10.43237   0.6787088     20.421 1.318 0    NoError    
+snb.fits               -148.800  378.435   42    2MASS.GC.cat           42     \
+   -148.800   378.435    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.            0.         0.            INDEF  INDEF 301  OffImage   
+snb.fits               326.949   348.548   43    2MASS.GC.cat           43     \
+   326.949    348.548    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.994562      10.53592   7.994562      17.743 0.384 0    NoError    
+snb.fits               320.572   420.018   44    2MASS.GC.cat           44     \
+   320.572    420.018    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     11.4304       10.53575   11.4304       17.355 0.321 0    NoError    
+snb.fits               416.097   444.912   45    2MASS.GC.cat           45     \
+   416.097    444.912    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     18.99518      10.32295   18.99518      16.803 0.249 0    NoError    
+snb.fits               418.162   444.938   46    2MASS.GC.cat           46     \
+   418.162    444.938    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     18.86612      10.38151   18.86613      16.811 0.250 0    NoError    
+snb.fits               402.689   444.786   47    2MASS.GC.cat           47     \
+   402.689    444.786    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     19.75819      10.43643   19.75819      16.761 0.244 0    NoError    
+snb.fits               313.479   463.258   48    2MASS.GC.cat           48     \
+   313.479    463.258    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.31572       10.3756    4.31572       18.412 0.523 0    NoError    
+snb.fits               347.066   428.072   49    2MASS.GC.cat           49     \
+   347.066    428.072    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     17.63978      10.29164   17.63978      16.884 0.259 0    NoError    
+snb.fits               399.853   359.355   50    2MASS.GC.cat           50     \
+   399.853    359.355    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     24.54759      10.47219   24.54759      16.525 0.219 0    NoError    
+snb.fits               263.982   450.932   51    2MASS.GC.cat           51     \
+   263.982    450.932    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.709005      10.24942   2.709005      18.918 0.660 0    NoError    
+snb.fits               303.553   262.900   52    2MASS.GC.cat           52     \
+   303.553    262.900    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.225978      10.52428   1.225978      19.779 0.981 0    NoError    
+snb.fits               648.237   366.285   53    2MASS.GC.cat           53     \
+   648.237    366.285    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.8257006     10.44138   0.8257006     20.208 1.195 0    NoError    
+snb.fits               589.563   237.833   54    2MASS.GC.cat           54     \
+   589.563    237.833    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.4499082     10.49613   0.4499082     20.867 1.619 0    NoError    
+snb.fits               567.272   330.915   55    2MASS.GC.cat           55     \
+   567.272    330.915    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.552         10.46192   1.552         19.523 0.871 0    NoError    
+snb.fits               553.529   380.973   56    2MASS.GC.cat           56     \
+   553.529    380.973    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.951963      10.54052   2.951963      18.825 0.632 0    NoError    
+snb.fits               542.430   435.300   57    2MASS.GC.cat           57     \
+   542.430    435.300    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     3.385688      10.40157   3.385688      18.676 0.590 0    NoError    
+snb.fits               519.309   396.636   58    2MASS.GC.cat           58     \
+   519.309    396.636    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     5.722531      10.42299   5.722531      18.106 0.454 0    NoError    
+snb.fits               499.566   394.264   59    2MASS.GC.cat           59     \
+   499.566    394.264    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     8.546748      10.39934   8.546748      17.670 0.371 0    NoError    
+snb.fits               489.276   365.468   60    2MASS.GC.cat           60     \
+   489.276    365.468    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.511237      10.3832    7.511237      17.811 0.396 0    NoError    
+snb.fits               483.195   391.776   61    2MASS.GC.cat           61     \
+   483.195    391.776    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     12.43177      10.41877   12.43177      17.264 0.308 0    NoError    
+snb.fits               467.951   378.957   62    2MASS.GC.cat           62     \
+   467.951    378.957    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     15.16437      10.24555   15.16437      17.048 0.279 0    NoError    
+snb.fits               455.801   405.917   63    2MASS.GC.cat           63     \
+   455.801    405.917    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     29.73375      10.41132   29.73375      16.317 0.199 0    NoError    
+snb.fits               247.499   461.390   64    2MASS.GC.cat           64     \
+   247.499    461.390    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.973536      10.44443   1.973536      19.262 0.773 0    NoError    
+snb.fits               226.776   405.392   65    2MASS.GC.cat           65     \
+   226.776    405.392    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     2.261417      10.4356    2.261417      19.114 0.722 0    NoError    
+snb.fits               203.897   387.687   66    2MASS.GC.cat           66     \
+   203.897    387.687    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.684153      10.48307   1.684153      19.434 0.837 0    NoError    
+snb.fits               132.956   305.128   67    2MASS.GC.cat           67     \
+   132.956    305.128    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.5552129     10.34779   0.5552129     20.639 1.457 0    NoError    
+snb.fits               124.564   373.046   68    2MASS.GC.cat           68     \
+   124.564    373.046    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.6766709     10.53442   0.6766708     20.424 1.320 0    NoError    
+snb.fits               182.444   441.910   69    2MASS.GC.cat           69     \
+   182.444    441.910    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.098545      10.52666   1.098544      19.898 1.036 0    NoError    
+snb.fits               359.044   365.144   70    2MASS.GC.cat           70     \
+   359.044    365.144    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     21.48021      10.36423   21.48021      16.670 0.234 0    NoError    
+snb.fits               332.876   437.957   71    2MASS.GC.cat           71     \
+   332.876    437.957    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     10.14616      10.34333   10.14616      17.484 0.341 0    NoError    
+snb.fits               409.496   443.908   72    2MASS.GC.cat           72     \
+   409.496    443.908    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     20.70218      10.53003   20.70218      16.710 0.239 0    NoError    
+snb.fits               364.017   457.988   73    2MASS.GC.cat           73     \
+   364.017    457.988    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     8.886267      10.25367   8.886267      17.628 0.364 0    NoError    
+snb.fits               368.855   344.735   74    2MASS.GC.cat           74     \
+   368.855    344.735    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     11.59326      10.43945   11.59326      17.339 0.319 0    NoError    
+snb.fits               346.852   337.582   75    2MASS.GC.cat           75     \
+   346.852    337.582    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     7.673147      10.50175   7.673147      17.788 0.392 0    NoError    
+snb.fits               335.611   384.699   76    2MASS.GC.cat           76     \
+   335.611    384.699    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     19.6091       10.41683   19.60909      16.769 0.245 0    NoError    
+snb.fits               481.903   468.618   77    2MASS.GC.cat           77     \
+   481.903    468.618    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.94393       10.51113   4.94393       18.265 0.488 0    NoError    
+snb.fits               471.490   478.518   78    2MASS.GC.cat           78     \
+   471.490    478.518    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     4.359934      10.46483   4.359933      18.401 0.520 0    NoError    
+snb.fits               437.002   868.712   79    2MASS.GC.cat           79     \
+   437.002    868.712    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.            0.         0.            INDEF  INDEF 301  OffImage   
+snb.fits               429.352   265.748   80    2MASS.GC.cat           80     \
+   429.352    265.748    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.479312      10.44303   1.479312      19.575 0.893 0    NoError    
+snb.fits               331.967   236.321   81    2MASS.GC.cat           81     \
+   331.967    236.321    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.8770583     10.50096   0.8770583     20.142 1.159 0    NoError    
+snb.fits               309.313   164.458   82    2MASS.GC.cat           82     \
+   309.313    164.458    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.3128218     10.40188   0.3128218     21.262 1.941 0    NoError    
+snb.fits               304.889   244.140   83    2MASS.GC.cat           83     \
+   304.889    244.140    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     0.9027568     10.35262   0.9027568     20.111 1.143 0    NoError    
+snb.fits               291.948   253.385   84    2MASS.GC.cat           84     \
+   291.948    253.385    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.003217      10.52211   1.003217      19.997 1.084 0    NoError    
+snb.fits               385.437   415.101   85    2MASS.GC.cat           85     \
+   385.437    415.101    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     101.4255      10.52248   101.4255      14.985 0.108 0    NoError    
+snb.fits               377.413   414.482   86    2MASS.GC.cat           86     \
+   377.413    414.482    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     76.57827      10.45191   76.57826      15.290 0.124 0    NoError    
+snb.fits               402.118   427.110   87    2MASS.GC.cat           87     \
+   402.118    427.110    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     51.92654      10.33212   51.92654      15.712 0.151 0    NoError    
+snb.fits               432.151   376.520   88    2MASS.GC.cat           88     \
+   432.151    376.520    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     38.33409      10.50833   38.33409      16.041 0.175 0    NoError    
+snb.fits               393.420   375.940   89    2MASS.GC.cat           89     \
+   393.420    375.940    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     66.50011      10.52927   66.50011      15.443 0.133 0    NoError    
+snb.fits               414.152   384.609   90    2MASS.GC.cat           90     \
+   414.152    384.609    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     109.1375      10.4903    109.1375      14.905 0.104 0    NoError    
+snb.fits               366.183   405.060   91    2MASS.GC.cat           91     \
+   366.183    405.060    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     65.72179      10.40134   65.72179      15.456 0.134 0    NoError    
+snb.fits               408.751   377.999   92    2MASS.GC.cat           92     \
+   408.751    377.999    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     72.96129      10.46375   72.96129      15.342 0.127 0    NoError    
+snb.fits               365.290   375.828   93    2MASS.GC.cat           93     \
+   365.290    375.828    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     37.44252      10.439     37.44252      16.067 0.177 0    NoError    
+snb.fits               378.921   381.902   94    2MASS.GC.cat           94     \
+   378.921    381.902    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     74.02095      10.32089   74.02094      15.327 0.126 0    NoError    
+snb.fits               383.270   403.350   95    2MASS.GC.cat           95     \
+   383.270    403.350    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     197.9909      10.42779   197.9909      14.258 0.077 0    NoError    
+snb.fits               410.645   393.969   96    2MASS.GC.cat           96     \
+   410.645    393.969    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     332.0271      10.51495   332.0271      13.697 0.060 0    NoError    
+snb.fits               427.443   384.641   97    2MASS.GC.cat           97     \
+   427.443    384.641    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     65.69043      10.42525   65.69043      15.456 0.134 0    NoError    
+snb.fits               376.628   381.030   98    2MASS.GC.cat           98     \
+   376.628    381.030    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     66.86784      10.52075   66.86784      15.437 0.133 0    NoError    
+snb.fits               352.172   417.639   99    2MASS.GC.cat           99     \
+   352.172    417.639    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     27.70502      10.46034   27.70502      16.394 0.206 0    NoError    
+snb.fits               394.894   364.712   100   2MASS.GC.cat           100    \
+   394.894    364.712    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     32.43428      10.46568   32.43428      16.222 0.191 0    NoError    
+snb.fits               415.216   373.629   101   2MASS.GC.cat           101    \
+   415.216    373.629    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     48.25524      10.43665   48.25524      15.791 0.156 0    NoError    
+snb.fits               397.211   379.169   102   2MASS.GC.cat           102    \
+   397.211    379.169    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     86.61458      10.4024    86.61459      15.156 0.117 0    NoError    
+snb.fits               424.040   395.819   103   2MASS.GC.cat           103    \
+   424.040    395.819    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     129.6135      10.40036   129.6134      14.718 0.095 0    NoError    
+snb.fits               383.181   403.300   104   2MASS.GC.cat           104    \
+   383.181    403.300    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     197.009       10.43496   197.009       14.264 0.077 0    NoError    
+snb.fits               391.235   419.770   105   2MASS.GC.cat           105    \
+   391.235    419.770    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     81.82726      10.43496   81.82726      15.218 0.120 0    NoError    
+snb.fits               279.148   268.682   106   2MASS.GC.cat           106    \
+   279.148    268.682    0.000   0.000   INDEF   INDEF          0    NoError   \
+   0.             0.             INDEF          0      0        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   1.80     1.177369      10.46002   1.177369      19.823 1.001 0    NoError    

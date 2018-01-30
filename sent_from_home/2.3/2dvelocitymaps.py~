@@ -1,0 +1,155 @@
+from matplotlib import pyplot as plt
+from astropy.io import fits
+from astropy.wcs import WCS
+import numpy as np
+import sys
+sys.path.insert(0, '/home/emilio/MLE/2.2/')
+from bin_functions import galaxy_inputs
+from termcolor import colored
+
+#to do: eliminate the y axis on second and third plots
+
+def read_catalog_gc(galcat):
+    RA = np.loadtxt(galcat, usecols=(1,))
+    DEC = np.loadtxt(galcat, usecols=(2,))
+    
+    V = np.loadtxt(galcat, usecols=(3,))        
+    
+    col1 = np.loadtxt(galcat, usecols=(4,))
+    col2 = np.loadtxt(galcat, usecols=(5,))
+    colour = col1 - col2
+    
+    return RA, DEC, V, colour  
+
+gal = raw_input('Enter the galaxy number: ')
+galinput = galaxy_inputs(gal)
+galcat = '/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'GC.dat'    
+
+RAg, DECg, V, col = read_catalog_gc(galcat)
+
+with open(galinput, 'r') as f:
+    inp = [x.split(' ')[0] for x in open(galinput).readlines()]
+
+c_sep = float(inp[4])   #colour separation
+n = len(RAg)
+
+if c_sep == -1000:       
+    coords = zip(RAg, DECg)
+    
+    fits_file = '/home/emilio/MLE/Galaxies/'+gal+'/'+'fits-null.fits'
+    hdu = fits.open(fits_file)[0]
+    wcs = WCS(hdu.header)
+    
+    ra = []
+    dec = []
+    
+    pix = wcs.wcs_world2pix(coords, 1)
+    
+    for i in range(0,len(pix)):
+        ra.append(pix[i][0])
+        dec.append(pix[i][1])
+    
+    Vmax = max(V)
+    Vmin = min(V)
+    
+    fig = plt.subplot(1,1,1, projection=wcs)
+    plt.scatter(ra, dec, c=V, vmin=Vmin, vmax=Vmax)
+    plt.imshow(hdu.data,cmap='gray_r', label='All GCs')
+    plt.title('All GCs')
+    
+    fig.set_ylabel('RA')
+    fig.set_xlabel('DEC')
+    
+    plt.show()
+    
+else:
+    RAblue = []
+    DECblue= []
+    RAred = []
+    DECred = []
+    V_b = []
+    V_r = []
+    
+    for i in range(0,n):
+        if col[i] < c_sep:
+            RAblue.append(RAg[i])
+            DECblue.append(DECg[i])
+            V_b.append(V[i])
+        else:
+            RAred.append(RAg[i])
+            DECred.append(DECg[i])
+            V_r.append(V[i])
+    
+    coords = zip(RAg, DECg)
+    coords_blue = zip(RAblue, DECblue)
+    coords_red = zip(RAred, DECred)
+    
+    fits_file = '/home/emilio/MLE/Galaxies/'+gal+'/'+'fits-null.fits'
+    hdu = fits.open(fits_file)[0]
+    wcs = WCS(hdu.header)
+    
+    ra = []
+    dec = []
+    ra_b = []
+    dec_b = []
+    ra_r = []
+    dec_r = []
+    
+    pix = wcs.wcs_world2pix(coords, 1)
+    pix_b = wcs.wcs_world2pix(coords_blue, 1)
+    pix_r = wcs.wcs_world2pix(coords_red, 1)
+    
+    for i in range(0,len(pix)):
+        ra.append(pix[i][0])
+        dec.append(pix[i][1])
+    for i in range(0,len(pix_b)):
+        ra_b.append(pix_b[i][0])
+        dec_b.append(pix_b[i][1])
+    for i in range(0, len(pix_r)):
+        ra_r.append(pix_r[i][0])
+        dec_r.append(pix_r[i][1])
+    
+    print 'number of blues:',len(ra_b)
+    print 'number of reds:', len(ra_r)
+    
+    print colored('If the color scale is not ok, change Vmax and Vmin inside the code!', 'red')    
+    
+    Vmax = max(V)-300
+    Vmin = min(V)
+    
+#    fig, (ax, ax2, ax3) = plt.subplots(1, 3, sharey=True, sharex=True, subplot_kw=dict(projection=wcs))
+#    ax.scatter(ra, dec, c=V, vmin=Vmin, vmax=Vmax)
+#    ax.imshow(hdu.data,cmap='gray_r', label='All GCs')
+#    ax.set_title('All GCs')    
+#    ax2.scatter(ra_b, dec_b, c=V_b, vmin=Vmin, vmax=Vmax)    
+#    ax2.imshow(hdu.data,cmap='gray_r', label='Blue GCs')
+#    ax2.set_title('Blue GCs')    
+#    ax3.scatter(ra_r, dec_r, c=V_r, vmin=Vmin, vmax=Vmax)
+#    ax3.imshow(hdu.data,cmap='gray_r', label='Red GCs')
+#    ax3.set_title('Red GCs')
+#    
+#    ax.set_ylabel('RA')
+#    ax2.set_xlabel('DEC')
+    
+    fig = plt.subplot(1,3,1, projection=wcs)
+    plt.scatter(ra, dec, c=V, vmin=Vmin, vmax=Vmax)
+    plt.imshow(hdu.data,cmap='gray_r', label='All GCs')
+    plt.title('All GCs')
+    
+    fig2= plt.subplot(1,3,2, projection=wcs)
+    plt.scatter(ra_b, dec_b, c=V_b, vmin=Vmin, vmax=Vmax)
+    cb = plt.colorbar(fraction=0.05, orientation='horizontal')
+    cb.set_label('Velocity $(km/s)$')
+    plt.imshow(hdu.data,cmap='gray_r', label='Blue GCs')
+    plt.title('Blue GCs')
+    
+    fig3 = plt.subplot(1,3,3, projection=wcs)
+    plt.scatter(ra_r, dec_r, c=V_r, vmin=Vmin, vmax=Vmax)
+    plt.imshow(hdu.data,cmap='gray_r', label='Red GCs')
+    plt.title('Red GCs')
+    
+    fig.set_ylabel('DEC')
+    fig2.set_xlabel('RA')
+    
+    plt.subplots_adjust(wspace=.0010)
+    plt.show()

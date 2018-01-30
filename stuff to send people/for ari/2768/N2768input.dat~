@@ -1,0 +1,11 @@
+09h11m37.5s      #galaxy RA
++60d02m14s       #galaxy RA
+73.0             #inclination (deg)
+-86.25           #PA (deg)
+0.57             #color separation of GC populations (if unimodal, use -1000)
+4.65             #sersic index
+50.46            #Re (arcsec)
+42.93            #h (expdisk) (arcsec)
+13.54            #mu_e
+17.00            #mu_d
+1353             #mean velocity (from NED) (km/s)

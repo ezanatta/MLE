@@ -1,0 +1,16 @@
+density plots for N3115, N2768, N7457
+Elliptical bins with fixed number of objects in each one.
+N3115 light comes from suprime cam fit (R-band)
+
+
+Catalogues used:
+
+7457: Hargis & Rhode et al. 2011 (Sent by Duncan)  136 GC 
+2768: Pota et al. 2012   (Sent by Arianna) 978 GC
+3115: Jennings et al. 2014 781 GC
+
+notes:
+
+N3115 R-band fit comes from suprime cam fit w/ Megamorph (see Jennings 2014)
+N3115 GC are cut on sixth bin (see bin plots)
+N7457 GC bins are cut on fourth bin (see bin plots)

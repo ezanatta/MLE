@@ -1,0 +1,265 @@
+#K IRAF       = NOAO/IRAFV2.16          version    %-23s     
+#K USER       = ana                     name       %-23s     
+#K HOST       = pluto                   computer   %-23s     
+#K DATE       = 2016-11-07              yyyy-mm-dd %-23s     
+#K TIME       = 18:10:21                hh:mm:ss   %-23s     
+#K PACKAGE    = apphot                  name       %-23s     
+#K TASK       = phot                    name       %-23s     
+#
+#K SCALE      = 1.                      units      %-23.7g   
+#K FWHMPSF    = 5.65                    scaleunit  %-23.7g   
+#K EMISSION   = yes                     switch     %-23b     
+#K DATAMIN    = INDEF                   counts     %-23.7g   
+#K DATAMAX    = INDEF                   counts     %-23.7g   
+#K EXPOSURE   = EXPTIME                 keyword    %-23s     
+#K AIRMASS    = ""                      keyword    %-23s     
+#K FILTER     = ""                      keyword    %-23s     
+#K OBSTIME    = ""                      keyword    %-23s     
+#
+#K NOISE      = poisson                 model      %-23s     
+#K SIGMA      = 5753.                   counts     %-23.7g   
+#K GAIN       = GAIN                    keyword    %-23s     
+#K EPADU      = 1.                      e-/adu     %-23.7g   
+#K CCDREAD    = RDNOISE                 keyword    %-23s     
+#K READNOISE  = 0.                      e-         %-23.7g   
+#
+#K CALGORITHM = none                    algorithm  %-23s     
+#K CBOXWIDTH  = 5.                      scaleunit  %-23.7g   
+#K CTHRESHOLD = 0.                      sigma      %-23.7g   
+#K MINSNRATIO = 1.                      number     %-23.7g   
+#K CMAXITER   = 10                      number     %-23d     
+#K MAXSHIFT   = 1.                      scaleunit  %-23.7g   
+#K CLEAN      = no                      switch     %-23b     
+#K RCLEAN     = 1.                      scaleunit  %-23.7g   
+#K RCLIP      = 2.                      scaleunit  %-23.7g   
+#K KCLEAN     = 3.                      sigma      %-23.7g   
+#
+#K SALGORITHM = mode                    algorithm  %-23s     
+#K ANNULUS    = 10.                     scaleunit  %-23.7g   
+#K DANNULUS   = 10.                     scaleunit  %-23.7g   
+#K SKYVALUE   = 0.                      counts     %-23.7g   
+#K KHIST      = 3.                      sigma      %-23.7g   
+#K BINSIZE    = 0.1                     sigma      %-23.7g   
+#K SMOOTH     = no                      switch     %-23b     
+#K SMAXITER   = 10                      number     %-23d     
+#K SLOCLIP    = 0.                      percent    %-23.7g   
+#K SHICLIP    = 0.                      percent    %-23.7g   
+#K SNREJECT   = 50                      number     %-23d     
+#K SLOREJECT  = 3.                      sigma      %-23.7g   
+#K SHIREJECT  = 3.                      sigma      %-23.7g   
+#K RGROW      = 0.                      scaleunit  %-23.7g   
+#
+#K WEIGHTING  = constant                model      %-23s     
+#K APERTURES  = 3.                      scaleunit  %-23s     
+#K ZMAG       = 25.                     zeropoint  %-23.7g   
+#
+#N IMAGE               XINIT     YINIT     ID    COORDS                 LID    \
+#U imagename           pixels    pixels    ##    filename               ##     \
+#F %-23s               %-10.3f   %-10.3f   %-6d  %-23s                  %-6d    
+#
+#N XCENTER    YCENTER    XSHIFT  YSHIFT  XERR    YERR            CIER CERROR   \
+#U pixels     pixels     pixels  pixels  pixels  pixels          ##   cerrors  \
+#F %-14.3f    %-11.3f    %-8.3f  %-8.3f  %-8.3f  %-15.3f         %-5d %-9s      
+#
+#N MSKY           STDEV          SSKEW          NSKY   NSREJ     SIER SERROR   \
+#U counts         counts         counts         npix   npix      ##   serrors  \
+#F %-18.7g        %-15.7g        %-15.7g        %-7d   %-9d      %-5d %-9s      
+#
+#N ITIME          XAIRMASS       IFILTER                OTIME                  \
+#U timeunit       number         name                   timeunit               \
+#F %-18.7g        %-15.7g        %-23s                  %-23s                   
+#
+#N RAPERT   SUM           AREA       FLUX          MAG    MERR   PIER PERROR   \
+#U scale    counts        pixels     counts        mag    mag    ##   perrors  \
+#F %-12.2f  %-14.7g       %-11.7g    %-14.7g       %-7.3f %-6.3f %-5d %-9s      
+#
+test_ext.fits          225.194   49.144    1     image.dat              1      \
+   225.194    49.144     0.000   0.000   INDEF   INDEF          0    NoError   \
+   4616.828       261.0766       90.57616       936    5        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     367257.5      28.56763   235365.7      11.571 0.007 0    NoError    
+test_ext.fits          228.847   104.474   2     image.dat              2      \
+   228.847    104.474    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4566.558       289.4366       155.0174       847    90       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     463606.9      28.56006   333185.7      11.193 0.005 0    NoError    
+test_ext.fits          121.938   152.052   3     image.dat              3      \
+   121.938    152.052    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4633.061       285.7103       70.04613       938    3        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     368506.4      28.37943   237022.8      11.563 0.007 0    NoError    
+test_ext.fits          233.891   164.105   4     image.dat              4      \
+   233.891    164.105    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4625.196       269.566        109.9186       925    16       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     469159.6      28.44324   337604.       11.179 0.005 0    NoError    
+test_ext.fits          770.061   230.949   5     image.dat              5      \
+   770.061    230.949    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4686.193       266.8335       146.9237       939    2        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     448016.6      28.37973   315023.7      11.254 0.005 0    NoError    
+test_ext.fits          114.764   261.884   6     image.dat              6      \
+   114.764    261.884    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4599.493       265.1462       121.5215       877    68       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     465232.6      28.5901    333732.7      11.192 0.005 0    NoError    
+test_ext.fits          499.199   263.477   7     image.dat              7      \
+   499.199    263.477    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4616.183       285.9096       152.8214       900    40       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     457133.6      28.52396   325461.8      11.219 0.006 0    NoError    
+test_ext.fits          351.864   283.562   8     image.dat              8      \
+   351.864    283.562    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4658.745       261.882        108.8155       933    4        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     413132.8      28.5905    279937.       11.382 0.006 0    NoError    
+test_ext.fits          152.127   284.776   9     image.dat              9      \
+   152.127    284.776    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4545.074       245.0452       92.02451       942    5        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     377809.9      28.57696   247925.5      11.514 0.006 0    NoError    
+test_ext.fits          10.384    300.897   10    image.dat              10     \
+   10.384     300.897    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4669.113       275.7268       90.13414       683    12       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     457477.3      28.63619   323771.7      11.224 0.005 0    NoError    
+test_ext.fits          1279.815  391.510   11    image.dat              11     \
+   1279.815   391.510    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4685.277       278.9811       166.2039       939    1        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     448059.9      28.53039   314387.2      11.256 0.006 0    NoError    
+test_ext.fits          870.873   417.196   12    image.dat              12     \
+   870.873    417.196    0.000   0.000   INDEF   INDEF          0    NoError   \
+   5145.968       320.4004       106.3195       937    5        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     380831.1      28.55165   233905.2      11.577 0.008 0    NoError    
+test_ext.fits          429.502   443.142   13    image.dat              13     \
+   429.502    443.142    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4735.696       271.812        141.1706       927    11       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     453672.9      28.58009   318326.3      11.243 0.005 0    NoError    
+test_ext.fits          225.900   484.997   14    image.dat              14     \
+   225.900    484.997    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4663.785       291.4849       163.9305       926    13       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     408063.6      28.37486   275729.4      11.399 0.007 0    NoError    
+test_ext.fits          940.310   521.852   15    image.dat              15     \
+   940.310    521.852    0.000   0.000   INDEF   INDEF          0    NoError   \
+   5027.127       318.054        142.0305       841    103      0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     439946.2      28.6168    296085.9      11.321 0.007 0    NoError    
+test_ext.fits          921.150   522.756   16    image.dat              16     \
+   921.150    522.756    0.000   0.000   INDEF   INDEF          0    NoError   \
+   5036.084       347.356        190.2296       866    80       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     474002.6      28.59594   329991.1      11.204 0.006 0    NoError    
+test_ext.fits          1076.852  530.930   17    image.dat              17     \
+   1076.852   530.930    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4782.935       278.113        119.7432       922    20       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     410228.6      28.44276   274188.7      11.405 0.006 0    NoError    
+test_ext.fits          103.492   606.004   18    image.dat              18     \
+   103.492    606.004    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4750.155       289.0796       -113.953       939    1        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     433158.       28.83175   296202.7      11.321 0.006 0    NoError    
+test_ext.fits          922.053   622.330   19    image.dat              19     \
+   922.053    622.330    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4938.404       297.6303       86.54632       935    8        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     404963.5      28.62889   263582.4      11.448 0.007 0    NoError    
+test_ext.fits          400.930   653.036   20    image.dat              20     \
+   400.930    653.036    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4775.441       273.1091       -36.2161       934    7        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     386211.6      28.37989   250685.1      11.502 0.007 0    NoError    
+test_ext.fits          1123.518  670.087   21    image.dat              21     \
+   1123.518   670.087    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4692.873       274.1413       75.69071       925    15       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     367197.7      28.68936   232562.2      11.584 0.007 0    NoError    
+test_ext.fits          58.957    822.955   22    image.dat              22     \
+   58.957     822.955    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4765.435       278.8668       139.0911       938    6        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     331414.3      28.38296   196157.2      11.768 0.009 0    NoError    
+test_ext.fits          956.316   824.881   23    image.dat              23     \
+   956.316    824.881    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4739.923       294.5247       54.96214       937    8        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     488408.5      28.63114   352699.1      11.131 0.005 0    NoError    
+test_ext.fits          986.699   825.948   24    image.dat              24     \
+   986.699    825.948    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4738.573       293.6179       137.0327       916    29       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     407465.3      28.62024   271846.2      11.414 0.007 0    NoError    
+test_ext.fits          261.439   851.428   25    image.dat              25     \
+   261.439    851.428    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4768.953       292.6099       168.7669       838    109      0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     441815.       28.37977   306473.2      11.284 0.006 0    NoError    
+test_ext.fits          874.608   915.466   26    image.dat              26     \
+   874.608    915.466    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4793.15        279.8812       141.36         944    3        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     385935.9      28.38013   249905.7      11.506 0.007 0    NoError    
+test_ext.fits          953.923   916.523   27    image.dat              27     \
+   953.923    916.523    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4746.456       253.4338       134.6265       901    39       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     491143.8      28.7076    354884.4      11.125 0.005 0    NoError    
+test_ext.fits          737.556   946.103   28    image.dat              28     \
+   737.556    946.103    0.000   0.000   INDEF   INDEF          0    NoError   \
+   4848.737       297.3603       141.3125       930    9        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     348369.1      28.65386   209434.1      11.697 0.009 0    NoError    
+test_ext.fits          959.900   1000.654  29    image.dat              29     \
+   959.900    1000.654   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4820.339       289.1448       125.1421       911    32       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     427536.7      28.64831   289442.2      11.346 0.006 0    NoError    
+test_ext.fits          419.695   1041.327  30    image.dat              30     \
+   419.695    1041.327   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4807.823       283.1357       132.0779       924    17       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     437730.9      28.47578   300824.3      11.304 0.006 0    NoError    
+test_ext.fits          356.053   1054.831  31    image.dat              31     \
+   356.053    1054.831   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4863.829       297.7058       140.3546       887    55       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     357909.       28.44415   219561.6      11.646 0.008 0    NoError    
+test_ext.fits          179.029   1090.095  32    image.dat              32     \
+   179.029    1090.095   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4832.719       288.1495       128.8763       924    15       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     436937.8      28.37506   299809.1      11.308 0.006 0    NoError    
+test_ext.fits          645.473   1105.335  33    image.dat              33     \
+   645.473    1105.335   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4813.383       286.352        123.5516       929    16       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     440047.2      28.43511   303178.1      11.296 0.006 0    NoError    
+test_ext.fits          1122.447  1135.307  34    image.dat              34     \
+   1122.447   1135.307   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4840.611       269.3581       142.4215       939    5        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     454839.6      28.45502   317099.9      11.247 0.005 0    NoError    
+test_ext.fits          151.196   1189.915  35    image.dat              35     \
+   151.196    1189.915   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4837.695       299.8642       159.1914       919    24       0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     474863.3      28.50998   336940.7      11.181 0.006 0    NoError    
+test_ext.fits          392.084   1193.877  36    image.dat              36     \
+   392.084    1193.877   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4865.172       266.0489       53.45336       941    1        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     351414.2      28.43437   213076.1      11.679 0.008 0    NoError    
+test_ext.fits          107.567   1267.278  37    image.dat              37     \
+   107.567    1267.278   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4878.806       267.2592       -115.1567      937    4        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     380724.1      28.47378   241806.1      11.541 0.007 0    NoError    
+test_ext.fits          704.693   1321.158  38    image.dat              38     \
+   704.693    1321.158   0.000   0.000   INDEF   INDEF          0    NoError   \
+   4881.477       258.9884       -116.4326      647    4        0    NoError   \
+   1.             INDEF          INDEF                  INDEF                  \
+   3.00     385635.8      28.60858   245983.6      11.523 0.007 0    NoError    

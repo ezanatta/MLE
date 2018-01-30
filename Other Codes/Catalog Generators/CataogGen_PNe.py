@@ -1,0 +1,24 @@
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+import numpy as np
+
+
+cat_input = raw_input('Enter the input catalog: ')
+gal = raw_input('Enter galaxy number: ')
+
+with open(cat_input, 'r') as f:
+    RA = [line.split()[1] for line in f]              #PNe catalog
+with open(cat_input, 'r') as f:    
+    DEC = [line.split()[2] for line in f]
+    
+V = np.loadtxt(cat_input, usecols=(3,))          # velocities
+    
+for i in range(0, len(RA)):
+    c = SkyCoord(RA[i], DEC[i])
+    RA[i], DEC[i] = c.ra.degree, c.dec.degree
+
+cat_out = 'N'+gal+'PNE.dat'
+    
+with open(cat_out,'w') as pnecat:
+    for i in range(0, len(RA)):
+        print >>pnecat, i+1, "%.8f"%RA[i], "%.8f"%DEC[i], V[i]
