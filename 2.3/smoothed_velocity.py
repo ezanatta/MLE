@@ -152,39 +152,41 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
     
     f, ax = plt.subplots(3, 3, projection=wcs) 
     
-    #fig1 = plt.subplot(1, 3, 1, projection=wcs)
-    plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-    plt.scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-    decx = fig1.coords[1]
-    decx.set_axislabel('DEC')
-    plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-    plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+    for l in range(0, len(gals)):
+        
+        #fig1 = plt.subplot(1, 3, 1, projection=wcs)
+        ax[.imshow(hdu.data, origin='lower',cmap='gray_r')
+        plt.scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        decx = fig1.coords[1]
+        decx.set_axislabel('DEC')
+        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        
+        #fig2 = plt.subplot(1, 3, 2, projection=wcs)
+        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
+        plt.scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        rax = fig2.coords[0]
+        rax.set_axislabel('RA')
+        decx = fig2.coords[1]
+        decx.set_ticklabel_visible(False)
+        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        
+        #fig3 = plt.subplot(1, 3, 3, projection=wcs)
+        decx = fig3.coords[1]
+        decx.set_ticklabel_visible(False)
+        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
+        p3 = plt.scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
+        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
+        cax,kw = mpl.colorbar.make_axes(fig3.axes, fraction=0.047, shrink=1.0, pad=0.07)
+        cb = plt.colorbar(p3, cax=cax, **kw)
+        tick_locator = ticker.MaxNLocator(nbins=5)
+        cb.locator = tick_locator
+        cb.update_ticks()
+        cb.set_label('Radial Velocity (km/s)')
     
-    #fig2 = plt.subplot(1, 3, 2, projection=wcs)
-    plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-    plt.scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-    rax = fig2.coords[0]
-    rax.set_axislabel('RA')
-    decx = fig2.coords[1]
-    decx.set_ticklabel_visible(False)
-    plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-    plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
-    
-    #fig3 = plt.subplot(1, 3, 3, projection=wcs)
-    decx = fig3.coords[1]
-    decx.set_ticklabel_visible(False)
-    plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-    p3 = plt.scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
-    plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-    plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
-    cax,kw = mpl.colorbar.make_axes(fig3.axes, fraction=0.047, shrink=1.0, pad=0.07)
-    cb = plt.colorbar(p3, cax=cax, **kw)
-    tick_locator = ticker.MaxNLocator(nbins=5)
-    cb.locator = tick_locator
-    cb.update_ticks()
-    cb.set_label('Radial Velocity (km/s)')
-
-    plt.subplots_adjust(wspace=.0010) 
+        plt.subplots_adjust(wspace=.0010) 
         
     plt.savefig('vmaps_allgals.png', dpi=300, format='png')    
     plt.show() 
