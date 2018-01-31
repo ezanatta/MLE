@@ -58,7 +58,7 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
     vnb = []
     vnr = []
     
-    RAall, DECall,RAb, DECb, RAr, DECr, vnbs, vnrs = [],[],[],[],[],[],[],[]
+    RAall, DECall, RAb, DECb, RAr, DECr, vnbs, vnrs = [[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[],[]
     
     for j in range(0, len(gals)):  
         
@@ -71,9 +71,7 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         col2 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(5,))
         col = col1 - col2
         
-        n = len(vn[j])
-        
-        for i in range(0,n):
+        for i in range(0,len(DRA)):
             if col[i] < cs[j]:
                 RAblue.append(DRA[i])
                 DECblue.append(DDEC[i])
@@ -83,12 +81,12 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
                 DECred.append(DDEC[i])
                 vnr.append(vn[j][i])
         
-        RAall.append(DRA)
-        DECall.append(DDEC)
-        RAb.append(RAblue)
-        DECb.append(DECblue)
-        RAr.append(RAred)
-        DECr.append(DECred)
+        RAall[j].append(DRA)
+        DECall[j].append(DDEC)
+        RAb[j].append(RAblue)
+        DECb[j].append(DECblue)
+        RAr[j].append(RAred)
+        DECr[j].append(DECred)
         vnbs.append(vnb)
         vnrs.append(vnr)
         
@@ -339,33 +337,33 @@ for gal in galaxies:
         
     vns.append(vn)    
     
-    V_c = V-np.mean(V)
-    vn_c = vn-np.mean(vn)
+#    V_c = V-np.mean(V)
+#    vn_c = vn-np.mean(vn)
     
-    fig = plt.subplot(1, 2, 1)
-    plt.text(min(RAg)+0.05,max(DECg)-0.01, 'NGC'+gal+'\n$\overline{V}_{obs}$='+str(int(np.mean(V))))
-    plt.scatter(RAg, DECg, s=30, c=V_c, alpha=0.7)
-    cb1 = plt.colorbar(fraction=0.04, orientation='horizontal')
-    cb1.set_label('$Velocity$ $(km/s)$')
-    plt.title('$V_{observed}$')
-    plt.xlabel('RA')
-    plt.ylabel('DEC')
-    plt.gca().invert_xaxis()
-    fig2 = plt.subplot(1, 2, 2)
-    plt.scatter(RAg, DECg, s=30, c=vn_c, vmin=np.min(V_c), vmax=np.max(V_c), alpha=0.7)
-    plt.text(min(RAg)+0.06,max(DECg)-0.01, '$\overline{V}_{smoothed}$='+str(int(np.mean(vn))))
-    plt.title('$V_{smoothed}$')
-    plt.xlabel('RA')
-    cb = plt.colorbar(fraction=0.04, orientation='horizontal')
-    cb.set_label('$Velocity_{smoothed}$ $(km/s)$')
-    plt.gca().invert_xaxis()
-    #fig2 = plt.subplot(1, 3, 3)
-    #plt.scatter(RAg, DECg, s=30, c=sn, alpha=0.7)
-    #plt.title('$\sigma_{smoothed}$')
-    #plt.xlabel('RA')
-    #cb = plt.colorbar(fraction=0.04, orientation='horizontal')
-    #cb.set_label('$\sigma_{smoothed}$ $(km/s)$')
-    plt.show()
+#    fig = plt.subplot(1, 2, 1)
+#    plt.text(min(RAg)+0.05,max(DECg)-0.01, 'NGC'+gal+'\n$\overline{V}_{obs}$='+str(int(np.mean(V))))
+#    plt.scatter(RAg, DECg, s=30, c=V_c, alpha=0.7)
+#    cb1 = plt.colorbar(fraction=0.04, orientation='horizontal')
+#    cb1.set_label('$Velocity$ $(km/s)$')
+#    plt.title('$V_{observed}$')
+#    plt.xlabel('RA')
+#    plt.ylabel('DEC')
+#    plt.gca().invert_xaxis()
+#    fig2 = plt.subplot(1, 2, 2)
+#    plt.scatter(RAg, DECg, s=30, c=vn_c, vmin=np.min(V_c), vmax=np.max(V_c), alpha=0.7)
+#    plt.text(min(RAg)+0.06,max(DECg)-0.01, '$\overline{V}_{smoothed}$='+str(int(np.mean(vn))))
+#    plt.title('$V_{smoothed}$')
+#    plt.xlabel('RA')
+#    cb = plt.colorbar(fraction=0.04, orientation='horizontal')
+#    cb.set_label('$Velocity_{smoothed}$ $(km/s)$')
+#    plt.gca().invert_xaxis()
+#    #fig2 = plt.subplot(1, 3, 3)
+#    #plt.scatter(RAg, DECg, s=30, c=sn, alpha=0.7)
+#    #plt.title('$\sigma_{smoothed}$')
+#    #plt.xlabel('RA')
+#    #cb = plt.colorbar(fraction=0.04, orientation='horizontal')
+#    #cb.set_label('$\sigma_{smoothed}$ $(km/s)$')
+#    plt.show()
     
     #if c_sep==-1000:
     #    plot_vmap_singleplot(path, vn)
