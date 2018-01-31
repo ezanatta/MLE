@@ -57,10 +57,17 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
     DECred = []
     vnb = []
     vnr = []
+
+    RAall, DECall, RAb, DECb, RAr, DECr, vnbs, vnrs = [],[],[],[],[],[],[],[]
     
-    RAall, DECall, RAb, DECb, RAr, DECr, vnbs, vnrs = [[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[],[]
     
     for j in range(0, len(gals)):  
+        RAblue = []
+        DECblue= []
+        RAred = []
+        DECred = []
+        vnb = []
+        vnr = []
         
         gal = gals[j]
     
@@ -81,21 +88,30 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
                 DECred.append(DDEC[i])
                 vnr.append(vn[j][i])
         
-        RAall[j].append(DRA)
-        DECall[j].append(DDEC)
-        RAb[j].append(RAblue)
-        DECb[j].append(DECblue)
-        RAr[j].append(RAred)
-        DECr[j].append(DECred)
-        vnbs.append(vnb)
-        vnrs.append(vnr)
+        RAall.append(DRA)
+        DECall.append(DDEC)
+        RAb.append(np.asarray(RAblue))
+        DECb.append(np.asarray(DECblue))
+        RAr.append(np.asarray(RAred))
+        DECr.append(np.asarray(DECred))
+        vnbs.append(np.asarray(vnb))
+        vnrs.append(np.asarray(vnr))
         
-          
+    RAall = np.asanyarray(RAall)
+    DECall = np.asanyarray(DECall)
+    RAb = np.asanyarray(RAb)
+    DECb = np.asanyarray(DECb)
+    RAr = np.asanyarray(RAr)
+    DECr = np.asanyarray(DECr)
+    vnbs = np.asanyarray(vnbs)
+    vnrs = np.asanyarray(vnrs)
+        
+    
     vcmaps, vrcmaps, vbcmaps, Vmins, Vmaxs, ras, decs, rars, decrs, rabs, decbs, hdus, coords_s = [],[],[],[],[],[],[],[],[],[],[],[],[]
     
     for k in range(0, len(gals)):
         
-        coords = zip(RAall[k], DECall[k])
+        coords = zip(np.array(RAall[k]), np.array(DECall[k]))
         coords_blue = zip(RAb[k], DECb[k])
         coords_red = zip(RAr[k], DECr[k])
         
@@ -148,38 +164,40 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
         decrs.append(decr)
         hdus.append(hdu.data)
         coords_s.append(coords)
+        
+    print coords_s    
     
-    f, ax = plt.subplots(3, 3, projection=wcs) 
+    f = plt.figure()
     
     for l in range(0, len(gals)):
         
-        #fig1 = plt.subplot(1, 3, 1, projection=wcs)
-        ax[l][1].imshow(hdu.data, origin='lower',cmap='gray_r')
-        ax[l][1].scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        decx = f.coords_s[l][1]
+        fig1 = plt.subplot(1, 3, 1, projection=wcs)
+        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
+        plt.scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        decx = fig1.coords_s[l][1]
         decx.set_axislabel('DEC')
-        ax[l][1].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        ax[l][1].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
         
-        #fig2 = plt.subplot(1, 3, 2, projection=wcs)
-        ax[l][2].imshow(hdu.data, origin='lower',cmap='gray_r')
-        ax[l][2].scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        rax = f.coords[l][0]
+        fig2 = plt.subplot(1, 3, 2, projection=wcs)
+        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
+        plt.scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
+        rax = fig2.coords[l][0]
         rax.set_axislabel('RA')
         decx = f.coords[l][1]
         decx.set_ticklabel_visible(False)
-        ax[l][2].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        ax[l][2].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
         
-        #fig3 = plt.subplot(1, 3, 3, projection=wcs)
-        decx = f.coords[l][1]
+        fig3 = plt.subplot(1, 3, 3, projection=wcs)
+        decx = fig3.coords[l][1]
         decx.set_ticklabel_visible(False)
-        ax[l][3].imshow(hdu.data, origin='lower',cmap='gray_r')
-        p3 = ax[l][3].scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
-        ax[l][3].set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        ax[l][3].set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
+        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
+        p3 = plt.scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
+        plt.set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
+        plt.set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
         cax,kw = mpl.colorbar.make_axes(f.axes, fraction=0.047, shrink=1.0, pad=0.07)
-        cb = ax[l][3].colorbar(p3, cax=cax, **kw)
+        cb = plt.colorbar(p3, cax=cax, **kw)
         tick_locator = ticker.MaxNLocator(nbins=5)
         cb.locator = tick_locator
         cb.update_ticks()
@@ -261,7 +279,7 @@ def read_catalog_gc(galcat):
     
 #gal = raw_input('Enter the galaxy number: ')
 
-galaxies = ['2768', '3115', '7457']
+galaxies = ['2768', '3115']
 c_seps = []
 galcats = []
 paths = []
