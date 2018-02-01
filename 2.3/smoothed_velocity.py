@@ -8,6 +8,10 @@ from bin_functions import galaxy_inputs
 from scipy import stats
 from astropy.io import fits
 from astropy.wcs import WCS
+from astropy import units as u
+label_size = 9
+mpl.rcParams['xtick.labelsize'] = label_size
+mpl.rcParams['ytick.labelsize'] = label_size 
 
 def plot_vmap_singleplot(path, vn):
     
@@ -50,7 +54,7 @@ def plot_vmap_singleplot(path, vn):
     cb.set_label('Radial Velocity (km/s)')
     plt.show() 
     
-def plot_vmap_tripleplot(path, vn, cs, gals):
+def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
     RAblue = []
     DECblue= []
     RAred = []
@@ -59,44 +63,64 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
     vnr = []
 
     RAall, DECall, RAb, DECb, RAr, DECr, vnbs, vnrs = [],[],[],[],[],[],[],[]
-    
-    
-    for j in range(0, len(gals)):  
-        RAblue = []
-        DECblue= []
-        RAred = []
-        DECred = []
-        vnb = []
-        vnr = []
+    RAp, DECp = [],[]
+
+    for j in range(0, len(gals)):
         
-        gal = gals[j]
-    
-        DRA = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
-        DDEC = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))    
+        if j <= 1:
+            RAblue = []
+            DECblue= []
+            RAred = []
+            DECred = []
+            vnb = []
+            vnr = []
+            
+            gal = gals[j]
         
-        col1 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(4,))
-        col2 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(5,))
-        col = col1 - col2
+            DRA = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
+            DDEC = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))
+            DRAp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(1,))
+            DDECp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(2,)) 
+            
+            col1 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(4,))
+            col2 = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(5,))
+            col = col1 - col2
+            
+            for i in range(0,len(DRA)):
+                if col[i] < cs[j]:
+                    RAblue.append(DRA[i])
+                    DECblue.append(DDEC[i])
+                    vnb.append(vn[j][i])
+                else:
+                    RAred.append(DRA[i])
+                    DECred.append(DDEC[i])
+                    vnr.append(vn[j][i])
+            
+            RAall.append(DRA)
+            DECall.append(DDEC)
+            RAb.append(np.asarray(RAblue))
+            DECb.append(np.asarray(DECblue))
+            RAr.append(np.asarray(RAred))
+            DECr.append(np.asarray(DECred))
+            vnbs.append(np.asarray(vnb))
+            vnrs.append(np.asarray(vnr))
+            
+            RAp.append(DRAp)
+            DECp.append(DDECp)
+            
+        else:
+            gal = gals[j]
         
-        for i in range(0,len(DRA)):
-            if col[i] < cs[j]:
-                RAblue.append(DRA[i])
-                DECblue.append(DDEC[i])
-                vnb.append(vn[j][i])
-            else:
-                RAred.append(DRA[i])
-                DECred.append(DDEC[i])
-                vnr.append(vn[j][i])
-        
-        RAall.append(DRA)
-        DECall.append(DDEC)
-        RAb.append(np.asarray(RAblue))
-        DECb.append(np.asarray(DECblue))
-        RAr.append(np.asarray(RAred))
-        DECr.append(np.asarray(DECred))
-        vnbs.append(np.asarray(vnb))
-        vnrs.append(np.asarray(vnr))
-        
+            DRA = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(1,))
+            DDEC = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'GC.dat', usecols=(2,))   
+            DRAp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(1,))
+            DDECp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(2,))
+            
+            RAall.append(DRA)
+            DECall.append(DDEC)           
+            RAp.append(DRAp)
+            DECp.append(DDECp)
+            
     RAall = np.asanyarray(RAall)
     DECall = np.asanyarray(DECall)
     RAb = np.asanyarray(RAb)
@@ -105,105 +129,266 @@ def plot_vmap_tripleplot(path, vn, cs, gals):
     DECr = np.asanyarray(DECr)
     vnbs = np.asanyarray(vnbs)
     vnrs = np.asanyarray(vnrs)
+    RAp = np.asanyarray(RAp)
+    DECp = np.asanyarray(DECp)
         
-    
-    vcmaps, vrcmaps, vbcmaps, Vmins, Vmaxs, ras, decs, rars, decrs, rabs, decbs, hdus, coords_s = [],[],[],[],[],[],[],[],[],[],[],[],[]
-    
-    for k in range(0, len(gals)):
-        
-        coords = zip(np.array(RAall[k]), np.array(DECall[k]))
-        coords_blue = zip(RAb[k], DECb[k])
-        coords_red = zip(RAr[k], DECr[k])
-        
-        fits_file = '../Galaxies/'+gals[j]+'/'+'fits-null.fits'
-        hdu = fits.open(fits_file)[0]
-        wcs = WCS(hdu.header)
-        
-        ra = []
-        dec = []
-        rab = []
-        decb = []
-        rar = []
-        decr = []
-        
-        pix = wcs.wcs_world2pix(coords, 1)
-        pix_b = wcs.wcs_world2pix(coords_blue, 1)
-        pix_r = wcs.wcs_world2pix(coords_red, 1)
-        
-        for i in range(0,len(pix)):
-            ra.append(pix[i][0])
-            dec.append(pix[i][1])
-        for i in range(0,len(pix_b)):
-            rab.append(pix_b[i][0])
-            decb.append(pix_b[i][1])
-        for i in range(0, len(pix_r)):
-            rar.append(pix_r[i][0])
-            decr.append(pix_r[i][1])
-        
-        print 'N'+gals[k]
-        print 'number of blues:',len(rab)
-        print 'number of reds:', len(rar)
-        
-        vcmap = vn[k] - np.mean(vn[k])
-        vrcmap = vnrs[k] - np.mean(vnrs[k])
-        vbcmap = vnbs[k] - np.mean(vnbs[k])
-    
-        Vmin = max(vcmap)
-        Vmax = min(vcmap)
-        
-        vcmaps.append(vcmap)
-        vrcmaps.append(vrcmap)
-        vbcmaps.append(vbcmap)
-        Vmins.append(Vmin)
-        Vmaxs.append(Vmax)
-        ras.append(ra)
-        decs.append(decs)
-        rabs.append(rab)
-        decbs.append(decb)        
-        rars.append(rars)
-        decrs.append(decr)
-        hdus.append(hdu.data)
-        coords_s.append(coords)
-        
-    print coords_s    
+    vcmaps, vrcmaps, vbcmaps, Vmins, Vmaxs, ras, decs, rars, decrs, rabs, decbs, hdus, coords_s, wcss = [],[],[],[],[],[],[],[],[],[],[],[],[],[]
+    vcmapps, raps, decps = [],[],[]   
     
     f = plt.figure()
+    adj = 20
+    for k in range(0, len(gals)):
+        if k <= 1:
+        
+            coords = zip(RAall[k], DECall[k])
+            coords_blue = zip(RAb[k], DECb[k])
+            coords_red = zip(RAr[k], DECr[k])
+            coords_p = zip(RAp[k], DECp[k])
+            
+            fits_file = '../Galaxies/'+gals[k]+'/'+'fits-null.fits'
+            hdu = fits.open(fits_file)[0]
+            wcs = WCS(hdu.header)
+            
+            ra = []
+            dec = []
+            rab = []
+            decb = []
+            rar = []
+            decr = []
+            rap = []
+            decp = []
+            
+            pix = wcs.wcs_world2pix(coords, 1)
+            pix_p = wcs.wcs_world2pix(coords_p, 1)
+            pix_b = wcs.wcs_world2pix(coords_blue, 1)
+            pix_r = wcs.wcs_world2pix(coords_red, 1)
+            
+            for i in range(0,len(pix)):
+                ra.append(pix[i][0])
+                dec.append(pix[i][1])
+            for i in range(0,len(pix_b)):
+                rab.append(pix_b[i][0])
+                decb.append(pix_b[i][1])
+            for i in range(0, len(pix_r)):
+                rar.append(pix_r[i][0])
+                decr.append(pix_r[i][1])
+            for i in range(0, len(pix_p)):
+                rap.append(pix_p[i][0])
+                decp.append(pix_p[i][1])
+            
+            print 'N'+gals[k]
+            
+            vcmap = vn[k] - np.mean(vn[k])
+            vrcmap = vnrs[k] - np.mean(vnrs[k])
+            vbcmap = vnbs[k] - np.mean(vnbs[k])
+            vcmapp = vnp[k] - np.mean(vnp[k])
+        
+            Vmin = min(vcmap)
+            Vmax = max(vcmap)-adj
+            
+            vcmapps.append(vcmapp)
+            vcmaps.append(vcmap)
+            vrcmaps.append(vrcmap)
+            vbcmaps.append(vbcmap)
+            Vmins.append(Vmin)
+            Vmaxs.append(Vmax)
+            raps.append(rap)
+            decps.append(decp)
+            ras.append(ra)
+            decs.append(dec)
+            rabs.append(rab)
+            decbs.append(decb)        
+            rars.append(rar)
+            decrs.append(decr)
+            hdus.append(hdu.data)
+            coords_s.append(coords)
+            wcss.append(wcs)   
     
-    for l in range(0, len(gals)):
+            fig1 = f.add_subplot(3, 4, 4*k+1, projection=wcss[k])
+            fig1.imshow(hdus[k], origin='lower',cmap='gray_r')
+            fig1.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'All GCs', fontsize=10)
+            fig1.scatter(ras[k], decs[k], s=15, c=vcmaps[k], vmin=Vmins[k], vmax=Vmaxs[k], edgecolors='None', alpha=1.0)  
+            #fig1.scatter(ras[l], decs[l], s=30, c=vcmaps[l], edgecolors='None', alpha=1.0)  
+            fig1.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
+            fig1.set_ylim(min(decs[k])-0.1*max(decs[k]), max(decs[k])+0.1*max(decs[k]))
+            rax1 = fig1.coords[0]  
+            rax1.set_axislabel(' ', minpad=-10.0)
+            rax1.set_major_formatter('dd:mm')
+            rax1.set_separator(('d', "'"))
+            #rax1.set_ticks(spacing=6.*u.arcmin)
+            rax1.set_ticks(number=2)
+            decx1 = fig1.coords[1]
+            decx1.set_axislabel('DEC', fontsize=15, minpad=0.2)
+            decx1.set_major_formatter('dd:mm')
+            decx1.set_separator(('d', "'"))
+            decx1.set_ticks(number=3)
+            rax1.display_minor_ticks(True)
+            decx1.display_minor_ticks(True)
+            rax1.set_ticklabel(size=9)
+            decx1.set_ticklabel(size=9)
+            
+            fig2 = f.add_subplot(3, 4, 4*k+2, projection=wcss[k])
+            fig2.imshow(hdus[k], origin='lower',cmap='gray_r')
+            fig2.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'Red GCs', fontsize=10)
+            fig2.scatter(rars[k], decrs[k], s=15, c=vrcmaps[k], vmin=Vmins[k], vmax=Vmaxs[k], edgecolors='None', alpha=1.0)  
+            #fig2.scatter(rars[l], decrs[l], s=30, c=vrcmaps[l], edgecolors='None', alpha=1.0)  
+            fig2.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
+            fig2.set_ylim(min(decs[k])-0.1*max(decs[k]), max(decs[k])+0.1*max(decs[k]))
+            rax2 = fig2.coords[0]
+            rax2.set_major_formatter('dd:mm')
+            rax2.set_separator(('d', "'"))
+            rax2.set_ticks(number=2)
+            #rax2.set_ticks(spacing=6.*u.arcmin)
+            decx2 = fig2.coords[1]
+            decx2.set_ticklabel_visible(False)
+            rax2.display_minor_ticks(True)
+            decx2.display_minor_ticks(True)
+            rax2.set_ticklabel(size=9)
+            decx2.set_ticklabel(size=9)
+
+            
+            fig3 = f.add_subplot(3, 4, 4*k+3, projection=wcss[k])
+            fig3.imshow(hdus[k], origin='lower',cmap='gray_r')
+            fig3.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'Blue GCs', fontsize=10)            
+            p3 = fig3.scatter(rabs[k], decbs[k], s=15, c=vbcmaps[k], vmin=Vmins[k], vmax=Vmaxs[k], edgecolors='None', alpha=1.0)
+            #p3 = fig3.scatter(rabs[l], decbs[l], s=30, c=vbcmaps[l], edgecolors='None', alpha=1.0)    
+            #cax,kw = mpl.colorbar.make_axes(fig3.axes, fraction=0.047, shrink=1.0, pad=0.07)
+            fig3.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
+            fig3.set_ylim(min(decs[k])-0.1*max(decs[k]), max(decs[k])+0.1*max(decs[k]))
+            #fig3.text(max(ras[k])-0.2*max(ras[k]),max(decs[k]), 'N'+gals[k], fontsize=12)
+            rax3 = fig3.coords[0]      
+            rax3.set_axislabel(' ', minpad=-30.0)
+            rax3.set_major_formatter('dd:mm')
+            rax3.set_separator(('d', "'"))
+            #rax3.set_ticks(spacing=6.*u.arcmin)
+            rax3.set_ticks(number=2)
+            decx3 = fig3.coords[1]
+            decx3.set_ticklabel_visible(False)
+            rax3.display_minor_ticks(True)
+            decx3.display_minor_ticks(True)
+            cbaxes = f.add_axes([0.15, 0.9, 0.7, 0.02])
+            cb = plt.colorbar(p3, cax = cbaxes, orientation='horizontal')
+            tick_locator = ticker.MaxNLocator(nbins=5)
+            cb.locator = tick_locator
+            cb.update_ticks()
+            cb.set_label('Radial Velocity (km/s)', fontsize=15)
+            cbaxes.xaxis.set_ticks_position('top')
+            cbaxes.xaxis.set_label_position('top')
+            rax3.set_ticklabel(size=9)
+            decx3.set_ticklabel(size=9)
+              
+            fig4 = plt.subplot(3, 4, 4*k+4, projection=wcs)
+            fig4.imshow(hdu.data, origin='lower',cmap='gray_r')
+            fig4.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'PNe', fontsize=10)
+            fig4.text(max(ras[k])-0.30*max(ras[k]),max(decs[k]), 'N'+gals[k], fontsize=10)            
+            fig4.scatter(raps[k], decps[k], s=15, c=vcmapps[k], vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)      
+            fig4.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
+            fig4.set_ylim(min(decs[k])-0.1*max(decs[k]), max(decs[k])+0.1*max(decs[k]))
+            rax4 = fig4.coords[0]  
+            rax4.set_axislabel(' ', minpad=-10.0)
+            rax4.set_major_formatter('dd:mm')
+            rax4.set_separator(('d', "'"))
+            #rax1.set_ticks(spacing=6.*u.arcmin)
+            rax4.set_ticks(number=2)
+            decx4 = fig4.coords[1]
+            decx4.set_ticklabel_visible(False)
+            rax4.display_minor_ticks(True)
+            decx4.display_minor_ticks(True) 
+            #rax4.set_axislabel('RA', fontsize=15, minpad=0.4)    
+            rax4.set_ticklabel(size=9)
+            decx4.set_ticklabel(size=9)
+            
+            if k==1:
+                #rax2.set_axislabel('RA', fontsize=15, minpad=0.4)
+                rax3.set_axislabel('RA', fontsize=15, minpad=0.4)
+                rax4.set_axislabel('RA', fontsize=15, minpad=0.4)
+        else:
+            hdu_list = fits.open(path[k]+'fits-null.fits')
+            hdu = hdu_list[0]
+            wcs = WCS(hdu.header)
+            
+            DRA = np.loadtxt('../Galaxies/'+gals[k]+'/'+'N'+gals[k]+'GC.dat', usecols=(1,))
+            DDEC = np.loadtxt('../Galaxies/'+gals[k]+'/'+'N'+gals[k]+'GC.dat', usecols=(2,))
+            DRAp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(1,))
+            DDECp = np.loadtxt('../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat', usecols=(2,))
+            
+            coords = zip(DRA, DDEC)
+            coords_p = zip(DRAp, DDECp)
+            
+            ra = []
+            dec = []
+            
+            print 'N'+gals[k]
+            
+            pix = wcs.wcs_world2pix(coords, 1)
+            
+            rap = []
+            decp = []
+            
+            pix_p = wcs.wcs_world2pix(coords_p, 1)
+            
+            for i in range(0,len(pix)):
+                ra.append(pix[i][0])
+                dec.append(pix[i][1])
+            for i in range(0, len(pix_p)):
+                rap.append(pix_p[i][0])
+                decp.append(pix_p[i][1])                
         
-        fig1 = plt.subplot(1, 3, 1, projection=wcs)
-        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-        plt.scatter(ra, dec, s=30, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        decx = fig1.coords_s[l][1]
-        decx.set_axislabel('DEC')
-        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+            fits_file = path[k]+'fits-null.fits'
+            hdu = fits.open(fits_file)[0]
+            
+            vcmap = vn[k]-np.mean(vn[k])
+            vcmapp = vnp[k]-np.mean(vnp[k])
         
-        fig2 = plt.subplot(1, 3, 2, projection=wcs)
-        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-        plt.scatter(rar, decr, s=30, c=vrcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)  
-        rax = fig2.coords[l][0]
-        rax.set_axislabel('RA')
-        decx = f.coords[l][1]
-        decx.set_ticklabel_visible(False)
-        plt.xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
-        
-        fig3 = plt.subplot(1, 3, 3, projection=wcs)
-        decx = fig3.coords[l][1]
-        decx.set_ticklabel_visible(False)
-        plt.imshow(hdu.data, origin='lower',cmap='gray_r')
-        p3 = plt.scatter(rab, decb, s=30, c=vbcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
-        plt.set_xlim(min(ra)-0.1*max(ra), max(ra)+0.05*max(ra))
-        plt.set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec)) 
-        cax,kw = mpl.colorbar.make_axes(f.axes, fraction=0.047, shrink=1.0, pad=0.07)
-        cb = plt.colorbar(p3, cax=cax, **kw)
-        tick_locator = ticker.MaxNLocator(nbins=5)
-        cb.locator = tick_locator
-        cb.update_ticks()
-        cb.set_label('Radial Velocity (km/s)')
-    
-        plt.subplots_adjust(wspace=.0010) 
+            Vmin = min(vcmap)
+            Vmax = max(vcmap)-adj
+            
+            fig1 = plt.subplot(3, 4, 9, projection=wcs)
+            fig1.imshow(hdu.data, origin='lower',cmap='gray_r')
+            fig1.text(min(ra)-0.08*max(ra),max(dec)+0.05*max(dec), 'All GCs', fontsize=10)
+            fig1.scatter(ra, dec, s=15, c=vcmap, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)      
+            fig1.set_xlim(min(ra)-0.1*max(ra), max(ra)+0.1*max(ra))
+            fig1.set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+            rax = fig1.coords[0]  
+            rax.set_axislabel(' ', minpad=-10.0)
+            rax.set_major_formatter('dd:mm')
+            rax.set_separator(('d', "'"))
+            #rax1.set_ticks(spacing=6.*u.arcmin)
+            rax.set_ticks(number=3)
+            decx = fig1.coords[1]
+            decx.set_axislabel('DEC', fontsize=15, minpad=0.2)
+            decx.set_major_formatter('dd:mm')
+            decx.set_separator(('d', "'"))
+            decx.set_ticks(number=3)
+            rax.display_minor_ticks(True)
+            decx.display_minor_ticks(True) 
+            rax.set_axislabel('RA', fontsize=15, minpad=0.4)
+            rax.set_ticklabel(size=9)
+            decx.set_ticklabel(size=9)
+
+            fig4 = plt.subplot(3, 4, 10, projection=wcs)
+            fig4.imshow(hdu.data, origin='lower',cmap='gray_r')
+            fig4.text(min(ra)-0.08*max(ra),max(dec)+0.05*max(dec), 'PNe', fontsize=10)
+            fig4.text(max(ra)-0.1*max(ra), max(dec)+0.05*max(dec), 'N'+gals[k], fontsize=10)
+            fig4.scatter(rap, decp, s=15, c=vcmapp, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
+            fig4.set_xlim(min(ra)-0.1*max(ra), max(ra)+0.1*max(ra))
+            fig4.set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
+            rax4 = fig4.coords[0]  
+            rax4.set_axislabel(' ', minpad=-10.0)
+            rax4.set_major_formatter('dd:mm')
+            rax4.set_separator(('d', "'"))
+            #rax1.set_ticks(spacing=6.*u.arcmin)
+            rax4.set_ticks(number=3)
+            decx4 = fig4.coords[1]
+            decx4.set_ticklabel_visible(False)
+            rax4.display_minor_ticks(True)
+            decx4.display_minor_ticks(True) 
+            rax4.set_axislabel('RA', fontsize=15, minpad=0.4)     
+            rax4.set_ticklabel(size=9)
+            decx4.set_ticklabel(size=9)
+            
+    f.subplots_adjust(wspace=.0)
+    f.subplots_adjust(hspace=.07)        
         
     plt.savefig('vmaps_allgals.png', dpi=300, format='png')    
     plt.show() 
@@ -216,31 +401,33 @@ def find_mgc(RA, DEC, x, y):     #routine to find the Mth closest GC
         
     ds = np.sort(d)     #putting distances in order to get the Mth closest
     ind = np.where(d==ds[19])  #finding the index of the Mth closest within original distance vector "d"
+    if len(ind[0])>1:
+        ind=ind[0][0]
     
     #in this case we have M=20 (i.e. array index = 19)
     
     return RA[ind], DEC[ind]  #return RA and DEC of Mth closest GC
 
-def aks(V, RA, DEC, x, y, A, B, dV):          #adaptive kernel smoothing (Coccatto et al, 2009)
-    w = np.zeros(len(V)) #weight vector (here lies all the method!)
+def aks(Vas, RA, DEC, x, y, A, B, dV):          #adaptive kernel smoothing (Coccatto et al, 2009)
+    w = np.zeros(len(Vas)) #weight vector (here lies all the method!)
     
     xm, ym = find_mgc(RA, DEC, x, y)  #RA and DEC of Mth closest GC
     k = A*np.sqrt((x-xm)**2+(y-ym)**2)+B     #kernel bandwidth, based on distance to Mth GC and constants A and B  
-    for i in range(0, len(V)):         
-        D = np.sqrt((RA[i]-x)**2+(DEC[i]-y)**2) #given 1 GC, find the distance to each other one              
+    for i in range(0, len(Vas)):         
+        D = np.sqrt((RA[i]-x)**2+(DEC[i]-y)**2) #given 1 GC, find the distance to each other one             
         w[i] = np.exp((-D**2)/2*k**2)            #add the ith GC weight to the weight array (so we have N weights)
     
-    ss=np.zeros(len(V))      #dispersions (smoothed)
-    vs=np.zeros(len(V))      #velocities (smoothed)
+    ss=np.zeros(len(Vas))      #dispersions (smoothed)
+    vs=np.zeros(len(Vas))      #velocities (smoothed)
     
 #    for i in range(0, len(V)):
 #        vs[i] = ((V[i]*w[i])/sum(w))    #for each ith GC, calculate the relative veloticy
 #    vs = sum(vs)
     
-    vs = (sum(V*w)/sum(w))
+    vs = (sum(Vas*w)/sum(w))
     
-    for i in range(0, len(V)):
-        ss[i] = (((V[i]**2)*w[i])/(sum(w))) #calculate for ith GC relative dispersion
+    for i in range(0, len(Vas)):
+        ss[i] = (((Vas[i]**2)*w[i])/(sum(w))) #calculate for ith GC relative dispersion
     ss = np.sqrt(sum(ss)-vs**2-dV**2)
       
     return vs, ss
@@ -279,13 +466,15 @@ def read_catalog_gc(galcat):
     
 #gal = raw_input('Enter the galaxy number: ')
 
-galaxies = ['2768', '3115']
+galaxies = ['2768', '3115', '7457']
 c_seps = []
 galcats = []
+galcatsp = []
 paths = []
 RAs, DECs, Vs = [], [], []
 RAps, DECps, Vps = [], [], []
 vns = []
+vnps = []
 
 for gal in galaxies:
     
@@ -297,24 +486,34 @@ for gal in galaxies:
     c_seps.append(float(inp[4]))   #colour separation
     
     galcat = '../Galaxies/'+gal+'/'+'N'+gal+'GC.dat'
+    galcatp = '../Galaxies/'+gal+'/'+'N'+gal+'PNE.dat'
     galcats.append(galcat)
+    galcatsp.append(galcatp)
     
     paths.append('../Galaxies/'+gal+'/') 
 
     
     RAg, DECg, V = read_catalog_gc(galcat)
+    RAp, DECp, Vp = read_catalog_gc(galcatp)
+    
     RAs.append(RAg)
     DECs.append(DECg)
     Vs.append(V)
+    RAps.append(RAp)
+    DECps.append(DECp)
+    Vps.append(Vp)
     
     #A = 0.48
     #B = 1.53
     dV = 30.0
     vn = np.zeros(len(V))   # array with smoothed velocities
+    vnp = np.zeros(len(Vp))
     sn = np.zeros(len(V))   # array with smoothed velocity dispersions
+    snp = np.zeros(len(Vp))
     pv = 0.0
     
-    upt = raw_input('Estimate A and B for %s? y/n: '%gal)
+    #upt = raw_input('Estimate A and B for %s? y/n: '%gal)
+    upt='y'
     if upt == 'y':
     
         print('calculating best A and B...')
@@ -351,9 +550,14 @@ for gal in galaxies:
     
     
     for i in range(0, len(V)):        # run aks for each GC
-        vn[i], sn[i] = aks(V, RAg, DECg, RAg[i], DECg[i], A, B, dV)    
+        vn[i], sn[i] = aks(V, RAg, DECg, RAg[i], DECg[i], A, B, dV)
+    for i in range(0, len(Vp)):        # run aks for each GC
+        vnp[i], snp[i] = aks(Vp, RAp, DECp, RAp[i], DECp[i], A, B, dV)    
+
+#    vnp = Vp
         
-    vns.append(vn)    
+    vns.append(vn)   
+    vnps.append(vnp) 
     
 #    V_c = V-np.mean(V)
 #    vn_c = vn-np.mean(vn)
@@ -388,10 +592,10 @@ for gal in galaxies:
     #else:
     #    plot_vmap_tripleplot(path, vn, c_sep)
     
-plot_vmap_tripleplot(paths, vns, c_seps, galaxies)
+plot_vmap_tripleplot(paths, vns, vnps, c_seps, galaxies)
 
-ch = raw_input('run Monte Carlo sim to get errors? y/n: ')
-
+#ch = raw_input('run Monte Carlo sim to get errors? y/n: ')
+ch='n'
 if ch=='y':
     err = np.zeros(100)
     for i in range(0, 100):    
