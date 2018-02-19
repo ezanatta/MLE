@@ -5,10 +5,12 @@ import sys
 sys.path.insert(0, '/home/emilio/MLE/2.2/')
 from bin_functions import bin_kpc, read_gc
 
-with open('current_galaxy.dat', 'r') as f:     
-    gal = [line.split()[0] for line in f]
-    gal = gal[0] 
-    
+#with open('current_galaxy.dat', 'r') as f:     
+#    gal = [line.split()[0] for line in f]
+#    gal = gal[0] 
+
+gal = raw_input('enter galaxy: ')
+
 op = raw_input('is this galaxy unimodal? y/n ')
     
 font = {'family': ['Computer Modern'],
@@ -319,7 +321,7 @@ if op=='y':
     plt.ylabel('V (km/s)', fontdict=font)
     plt.ylim(0, 250)
     plt.xlim(0, 12)
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper left', numpoints=1)
     
     plot4 = plt.subplot(2, 1, 2)
    # plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
@@ -401,7 +403,7 @@ else:
     plt.ylabel('V (km/s)', fontdict=font)
     plt.ylim(0, 450)
     plt.xlim(0, 33)      
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper left', numpoints=1)
     
     plot2 = plt.subplot(2, 3, 2)
     plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
@@ -409,7 +411,7 @@ else:
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
     plt.xlim(0, 33)      
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper left', numpoints=1)
     
     plot3 = plt.subplot(2, 3, 3)
     plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
@@ -417,7 +419,7 @@ else:
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
     plt.xlim(0, 33)      
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper left', numpoints=1)
     
     plot4 = plt.subplot(2, 3, 4)
     plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
