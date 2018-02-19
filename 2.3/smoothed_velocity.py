@@ -136,7 +136,8 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
     vcmapps, raps, decps = [],[],[]   
     
     f = plt.figure()
-    adj = 20
+    adj_max = [150,100]
+    adj_min = [20,20]
     for k in range(0, len(gals)):
         if k <= 1:
         
@@ -176,15 +177,15 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
                 rap.append(pix_p[i][0])
                 decp.append(pix_p[i][1])
             
-            print 'N'+gals[k]
-            
             vcmap = vn[k] - np.mean(vn[k])
             vrcmap = vnrs[k] - np.mean(vnrs[k])
             vbcmap = vnbs[k] - np.mean(vnbs[k])
             vcmapp = vnp[k] - np.mean(vnp[k])
         
-            Vmin = min(vcmap)
-            Vmax = max(vcmap)-adj
+            Vmin = min(vcmap)+adj_min[k]
+            Vmax = max(vcmap)-adj_max[k]
+            
+            print 'N'+gals[k], max(vcmap)-np.median(vcmap), np.median(vcmap)-min(vcmap)
             
             vcmapps.append(vcmapp)
             vcmaps.append(vcmap)
@@ -250,7 +251,7 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             fig3 = f.add_subplot(3, 4, 4*k+3, projection=wcss[k])
             fig3.imshow(hdus[k], origin='lower',cmap='gray_r')
             fig3.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'Blue GCs', fontsize=10)            
-            p3 = fig3.scatter(rabs[k], decbs[k], s=15, c=vbcmaps[k], vmin=Vmins[k], vmax=Vmaxs[k], edgecolors='None', alpha=1.0)
+            fig3.scatter(rabs[k], decbs[k], s=15, c=vbcmaps[k], vmin=Vmins[k], vmax=Vmaxs[k], edgecolors='None', alpha=1.0)
             #p3 = fig3.scatter(rabs[l], decbs[l], s=30, c=vbcmaps[l], edgecolors='None', alpha=1.0)    
             #cax,kw = mpl.colorbar.make_axes(fig3.axes, fraction=0.047, shrink=1.0, pad=0.07)
             fig3.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
@@ -266,14 +267,6 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             decx3.set_ticklabel_visible(False)
             rax3.display_minor_ticks(True)
             decx3.display_minor_ticks(True)
-            cbaxes = f.add_axes([0.15, 0.9, 0.7, 0.02])
-            cb = plt.colorbar(p3, cax = cbaxes, orientation='horizontal')
-            tick_locator = ticker.MaxNLocator(nbins=5)
-            cb.locator = tick_locator
-            cb.update_ticks()
-            cb.set_label('Radial Velocity (km/s)', fontsize=15)
-            cbaxes.xaxis.set_ticks_position('top')
-            cbaxes.xaxis.set_label_position('top')
             rax3.set_ticklabel(size=9)
             decx3.set_ticklabel(size=9)
               
@@ -281,7 +274,7 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             fig4.imshow(hdu.data, origin='lower',cmap='gray_r')
             fig4.text(min(ras[k])-0.08*max(ras[k]),max(decs[k]), 'PNe', fontsize=10)
             fig4.text(max(ras[k])-0.30*max(ras[k]),max(decs[k]), 'N'+gals[k], fontsize=10)            
-            fig4.scatter(raps[k], decps[k], s=15, c=vcmapps[k], vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)      
+            p4 = fig4.scatter(raps[k], decps[k], s=15, c=vcmapps[k], vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)      
             fig4.set_xlim(min(ras[k])-0.1*max(ras[k]), max(ras[k])+0.05*max(ras[k]))
             fig4.set_ylim(min(decs[k])-0.1*max(decs[k]), max(decs[k])+0.1*max(decs[k]))
             rax4 = fig4.coords[0]  
@@ -297,6 +290,24 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             #rax4.set_axislabel('RA', fontsize=15, minpad=0.4)    
             rax4.set_ticklabel(size=9)
             decx4.set_ticklabel(size=9)
+            if k==0:
+                cbaxes = f.add_axes([0.9, 0.645, 0.02, 0.254])
+                cb = plt.colorbar(p4, cax = cbaxes, orientation='vertical')
+                #cb = plt.colorbar(p4, orientation='vertical', fraction=0.07)
+                tick_locator = ticker.MaxNLocator(nbins=5)
+                cb.locator = tick_locator
+                cb.update_ticks()
+                cb.set_label('Velocity (km/s)', fontsize=10)
+            if k==1:
+                cbaxes = f.add_axes([0.9, 0.391, 0.02, 0.218])
+                cb = plt.colorbar(p4, cax = cbaxes, orientation='vertical')
+                #cb = plt.colorbar(p4, orientation='vertical', fraction=0.07)
+                tick_locator = ticker.MaxNLocator(nbins=5)
+                cb.locator = tick_locator
+                cb.update_ticks()
+                cb.set_label('Velocity (km/s)', fontsize=10)
+            #cbaxes.xaxis.set_ticks_position('top')
+            #cbaxes.xaxis.set_label_position('top')
             
             if k==1:
                 #rax2.set_axislabel('RA', fontsize=15, minpad=0.4)
@@ -317,8 +328,6 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             
             ra = []
             dec = []
-            
-            print 'N'+gals[k]
             
             pix = wcs.wcs_world2pix(coords, 1)
             
@@ -341,7 +350,9 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             vcmapp = vnp[k]-np.mean(vnp[k])
         
             Vmin = min(vcmap)
-            Vmax = max(vcmap)-adj
+            Vmax = max(vcmap)
+            
+            print 'N'+gals[k], max(vcmap)-np.median(vcmap), np.median(vcmap)-min(vcmap)
             
             fig1 = plt.subplot(3, 4, 9, projection=wcs)
             fig1.imshow(hdu.data, origin='lower',cmap='gray_r')
@@ -370,7 +381,7 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             fig4.imshow(hdu.data, origin='lower',cmap='gray_r')
             fig4.text(min(ra)-0.08*max(ra),max(dec)+0.05*max(dec), 'PNe', fontsize=10)
             fig4.text(max(ra)-0.1*max(ra), max(dec)+0.05*max(dec), 'N'+gals[k], fontsize=10)
-            fig4.scatter(rap, decp, s=15, c=vcmapp, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
+            p4 = fig4.scatter(rap, decp, s=15, c=vcmapp, vmin=Vmin, vmax=Vmax, edgecolors='None', alpha=1.0)   
             fig4.set_xlim(min(ra)-0.1*max(ra), max(ra)+0.1*max(ra))
             fig4.set_ylim(min(dec)-0.1*max(dec), max(dec)+0.1*max(dec))
             rax4 = fig4.coords[0]  
@@ -386,6 +397,13 @@ def plot_vmap_tripleplot(path, vn, vnp, cs, gals):
             rax4.set_axislabel('RA', fontsize=15, minpad=0.4)     
             rax4.set_ticklabel(size=9)
             decx4.set_ticklabel(size=9)
+            cbaxes = f.add_axes([0.511, 0.12, 0.02, 0.214])
+            cb = plt.colorbar(p4, cax = cbaxes, orientation='vertical')
+            #cb = plt.colorbar(p4, orientation='vertical', fraction=0.07)
+            tick_locator = ticker.MaxNLocator(nbins=5)
+            cb.locator = tick_locator
+            cb.update_ticks()
+            cb.set_label('Velocity (km/s)', fontsize=10)
             
     f.subplots_adjust(wspace=.0)
     f.subplots_adjust(hspace=.07)        
@@ -513,7 +531,7 @@ for gal in galaxies:
     pv = 0.0
     
     #upt = raw_input('Estimate A and B for %s? y/n: '%gal)
-    upt='y'
+    upt='n'
     if upt == 'y':
     
         print('calculating best A and B...')
