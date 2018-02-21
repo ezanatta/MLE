@@ -9,7 +9,7 @@ c Likelihood code to be run on a mock galaxy. Input:catalogue of PNe and input f
       double precision l(m),v(m),sv(m),sr(m),ss(m),rmax(m),rs(m)
       double precision xp,yp,xss,yss,ps,Rc,Rmc,Rsc,Dc,Dmc,Dsc,pa,incl
       double precision vned, i_rad,lcut(m),ppm(m),xm(m),ym(m),sz_c(m)  
-      double precision cos_phi(m),sin_phi(m),xs(m),ys(m),ysi(m)
+      double precision cos_phi(m),sin_phi(m),xs(m),ys(m),ysi(m),cut(m)
       double precision vvs(m),sigmas(m),v_halos(m),bd(m),bb(m),xsi(m)
       double precision mm(m),mxl(m),mxv(m),mxs(m),mxsv(m),mxh(m)
       double precision mxf(m),rgal(m),vhel_av(m),rgalgc(m),b(m)  
@@ -47,7 +47,7 @@ c       open(44,file="coord.dat",status="unknown")
 c     rgal(h), h, raggio di ogni bin 
        open(15,file="bin_pne.dat",status="unknown")
 c     coordinate and vel v_av, xs, ysi
-c       open(12,file="vprofile.dat",status="unknown")
+       open(12,file="lcut.dat",status="unknown")
 c     likelihood
        open(10,file="like_pne.dat",status="unknown")
 c     data used in the program before and after sigma-clipping
@@ -81,14 +81,19 @@ c        Dsc=0
 
       read(21,*)xp,yp,xss,yss,ps,radeg,decdeg,pa,incl,vned,nbin
 
+
+      do h=1,nbin
+         read(12,*)cut(h)
+         enddo
+
       ai=incl
  
-      pa_rad=(pa)*pi/180      
+      pa_rad=(-45.4+180)*pi/180      
 
        i_rad=ai*pi/180
 
        write(*,*)' i_rad=',i_rad,' i_deg=',ai, 'pa= ', pa
-       write(*,*) xp,yp,radeg,decdeg
+       write(*,*) xp,yp,Rc,Rmc,Rsc,Dc,Dmc,Dsc
 
        cos_i=COS(i_rad)
        sin_i=SIN(i_rad)
@@ -125,9 +130,8 @@ c          Read the file containin the fi values
 
 c   Read coordinate ra and dec in arcsec
 
-         read(11,*,end=1111)s,ra(i),dec(i),vel(i),bi(i),ri(i)
 
-         write(*,*)vel(i)
+         read(11,*,end=1111)s,ra(i),dec(i),vel(i),bi(i),ri(i)
 
           n=n+1
           ppm(i)=n
@@ -199,7 +203,7 @@ c     obtaining the inclination angle and correct coordinates
        do i=1,n
           
           
-          xsi(i)=xs(i)*sqrt(cos_i)
+          xsi(i)=-xs(i)*sqrt(cos_i)
           ysi(i)=ys(i)/sqrt(cos_i)
           rs(i)=sqrt(xsi(i)**2+ysi(i)**2)
 
@@ -439,33 +443,41 @@ c                           enddo
 
                write(*,*)n,tot_gc,cont,cont1
 
-               do h=1,nbin
-                  write(*,*)rgal(h),rgalgc(h),mm(h)
+
+            
+                do i=1,n
+
+c                  write(*,*)rgal(h),rgalgc(h),mm(h)
               
-                  enddo
+                  
 
-                 do i=1,n
-
+c                 do i=1,n
+                    
                    bb(i)=e**(bb(i))
                    bd(i)=e**(bd(i))
                    ftot(i)=(bb(i)/(bb(i)+bd(i)))
-
+c                   write(*,*)bb, bd, ftot 
 c                     write(*,*)gi_c(i)
                     write(17,771)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
      &               ysi_c(i),vel_c(i),
      &              ftot(i),bb(i),bd(i),gi_c(i),likes_c(i),sg_c(i),
      &              sz_c(i),comp_c(i),bin_c(i),i_c(i)
                     
+                do h=1,nbin
+                   if(likes_c(i).le.cut(h))comp_c(i)=5
 
+c                     write(20,772)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
+c     &              vel_c(i),
+c     &              fb_c(i),ftot(i),gi_c(i),comp_c(i),bin_c(i),i_c(i)
+                    enddo
                    write(*,*)likes_c(i),comp_c(i)
 
-                   if(likes_c(i).le.-6.85)comp_c(i)=5
+
 
                      write(20,772)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
      &              vel_c(i),
      &              fb_c(i),ftot(i),gi_c(i),comp_c(i),bin_c(i),i_c(i)
                     enddo
-
 
                     
 c                     do i=1,n

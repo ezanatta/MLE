@@ -12,7 +12,7 @@ c Likelihood code to be run on a mock galaxy. Input:catalogue of PNe and input f
       double precision cos_phi(m),sin_phi(m),xs(m),ys(m),ysi(m)
       double precision vvs(m),sigmas(m),v_halos(m),bd(m),bb(m),xsi(m)
       double precision mm(m),mxl(m),mxv(m),mxs(m),mxsv(m),mxh(m)
-      double precision mxf(m),rgal(m),vhel_av(m),rgalgc(m),b(m),mxvh(m)  
+      double precision mxf(m),rgal(m),vhel_av(m),rgalgc(m),b(m)  
       double precision likes,loglike,likes_av,loglikes_av,sg_c(m)
       double precision xs_c(m),ys_c(m),ysi_c(m),vel_c(m),bin_c(m)
       double precision fb_c(m),gi_c(m),cat_c(m),likes_c(m),comp(m)
@@ -23,8 +23,7 @@ c Likelihood code to be run on a mock galaxy. Input:catalogue of PNe and input f
       double precision logbda(m),logbba(m),cos_phica(m),comp_c(m)
       double precision ram(m),ras(m),decm(m),decs(m),rah(m),dech(m)
       double precision errb(m),errr(m),sm(m),sm_c(m),ra_c(m),dec_c(m)
-      double precision tot_red,tot_red_disk,tot_red_bulge,tot_blue
-      double precision tot_blue_disk,tot_blue_bulge,ll(m)
+      
       
 
 c INPUT & OUTPUT FILES
@@ -48,7 +47,7 @@ c       open(44,file="coord.dat",status="unknown")
 c     rgal(h), h, raggio di ogni bin 
        open(15,file="bin_pne.dat",status="unknown")
 c     coordinate and vel v_av, xs, ysi
-       open(12,file="lcut.dat",status="unknown")
+c       open(12,file="vprofile.dat",status="unknown")
 c     likelihood
        open(10,file="like_pne.dat",status="unknown")
 c     data used in the program before and after sigma-clipping
@@ -65,24 +64,26 @@ c     reading parameters
 
         xp=0
         yp=0
-        Rc=0
-        Rmc=0
-        Rsc=0
-        Dc=0
-        Dmc=0
-        Dsc=0
+c        Rc=0
+c        Rmc=0
+c        Rsc=0
+c        Dc=0
+c        Dmc=0
+c        Dsc=0
         pa=0
         incl=0
         vned=0    
         Racc=0
         Decc=0
         nbin=0
+        radeg=0
+        decdeg=0
 
-      read(21,*)xp,yp,xss,yss,ps,Rc,Rmc,Rsc,Dc,Dmc,Dsc,pa,incl,vned,nbin
+      read(21,*)xp,yp,xss,yss,ps,radeg,decdeg,pa,incl,vned,nbin
 
       ai=incl
  
-      pa_rad=(pa+180)*pi/180      
+      pa_rad=(pa)*pi/180      
 
        i_rad=ai*pi/180
 
@@ -124,26 +125,24 @@ c          Read the file containin the fi values
 
 c   Read coordinate ra and dec in arcsec
 
-         read(11,*,end=1111)id(i),ra(i),dec(i),vel(i),b(i),ri(i)
+
+         read(11,*,end=1111)s,ra(i),dec(i),vel(i),bi(i),ri(i)
 
           n=n+1
           ppm(i)=n
-          
-          comp(i)=0
 
-        gi(i)=b(i)-ri(i)
-        write(*,*)'gi',gi(i)
+        gi(i)=bi(i)-ri(i)
 
      
 
-          Racc=Rc*3600 + Rmc*60 + Rsc
-          Decc=Dc*3600 + Dmc*60 + Dsc
+          Racc=radeg*3600
+          Decc=decdeg*3600
 
 c          write(*,*)Racc, Decc
 
          xm(i)=0
 c         ra(i)=(rah(i)+ram(i)/60+ras(i)/3600)*15
-          xm(i)=( ra(i)/15*3600 )-Racc
+          xm(i)=( ra(i)*3600 )-Racc
 c           xm(i)=( ra(i))-Racc
     
          ym(i)=0
@@ -155,7 +154,7 @@ c         ym(i)=dec(i) - Decc
           y_rad=Decc*pi/(3600*180)
          
 
-          xm(i)=xm(i)*15*cos(y_rad)
+          xm(i)=xm(i)*cos(y_rad)
 c            xm(i)=xm(i)*15
 c            open(56,file="1023_PNe_f.cat",status="unknown")
 c            write(56,556)ra(i),dec(i),vel(i),fb(i)
@@ -199,7 +198,7 @@ c     obtaining the inclination angle and correct coordinates
        do i=1,n
           
           
-          xsi(i)=-xs(i)*sqrt(cos_i)
+          xsi(i)=xs(i)*sqrt(cos_i)
           ysi(i)=ys(i)/sqrt(cos_i)
           rs(i)=sqrt(xsi(i)**2+ysi(i)**2)
 
@@ -225,22 +224,19 @@ c       do i=1,n
 c          write(*,*)b(i),i,xs(i),ys(i)
 c       enddo
 
-   
-c GC obtaining prob for each GC
- 
-           open(17,file="unliky.dat",status="unknown")
-           open(19,file="all.dat",status="unknown")
-           open(20,file="for_lodo.dat",status="unknown")
-           open(22,file="bin_vb.dat",status="unknown")
-
-           do h=1,nbin
+       do h=1,nbin
 c          do i=1,n
              rgalgc(h)=b(int((h*n/nbin)))
 c            enddo
               write(*,*)'rgalgc', rgalgc(h)
-              write(22,*) rgalgc(h)
              enddo
 
+ 
+c GC obtaining prob for each GC
+ 
+              open(17,file="unliky.dat",status="unknown")
+              open(19,file="all.dat",status="unknown")
+              open(20,file="for_lod_0.dat",status="unknown")
 
                likes=0
                tot_gc=0
@@ -280,14 +276,12 @@ c                  cat_c(i)=0
 
                do h=1,nbin
 
-                  read(10,*)mxl(h),mxv(h),mxs(h),mxsv(h),mxh(h),mxf(h),
-     &            s,s,mm(h),s,mxvh(h)
+                  read(10,*)mxl(h),mxv(h),mxs(h),mxsv(h),mxh(h),mxf(h)
 
                   read(15,*)rgal(h)
                   write(*,*)'rgal',rgal(h)
 
                   if(rgal(nbin).le.rgalgc(nbin))rgal(nbin)=rgalgc(nbin)
-
                   loglike=0
                   likes=0
                   likes_av=0
@@ -317,12 +311,10 @@ c                       write(*,*)'rs',rs(i)
      &                       *(cos_phi(i))))**2))/(2*(sigmas(i)**2))
 
                         
-                        v_halos(i)=((vhel_av(i)-(mxvh(h)*
-     &                               sin_i*cos_phi(i)))**2)/
-     &                               (2*(mxh(h)**2))
 
-c                        v_halos(i)=((vhel_av(i)**2)/
-c     &                              (2*(mxh(h)**2)))
+
+                        v_halos(i)=((vhel_av(i)**2)/
+     &                              (2*(mxh(h)**2)))
 
 
                            likes=(((1-fb(i))*exp(-(vvs(i)))
@@ -349,10 +341,9 @@ c                           cat_c(cont)=cat(i)
                            likes_c(cont)=loglike
                            bin_c(cont)=h
                            i_c(cont)=i
-                           comp_c(cont)=comp(i)
-                           sg_c(cont)=sg(i)
-                           sz_c(cont)=sz(i)
-                           sm_c(cont)=sm(i)
+                           comp_c(cont)=0
+                           sg_c(cont)=0
+                           sz_c(cont)=0
                            ra_c(cont)=ra(i)
                            dec_c(cont)=dec(i)
 
@@ -443,98 +434,39 @@ c                           enddo
 
                enddo
 
-c               write(*,*)'here'
+               write(*,*)'here',n
 
                write(*,*)n,tot_gc,cont,cont1
 
-c               open(66,file="bin_rej.dat",status="unknown")
-
                do h=1,nbin
                   write(*,*)rgal(h),rgalgc(h),mm(h)
-                  read(12,*)ll(h)
               
                   enddo
 
-                     tot_red_disk=0
-                     tot_red=0
-                     tot_red_bulge=0
-                     tot_blue_disk=0
-                     tot_blue=0
-                     tot_blue_bulge=0
-
-                     ntot_gc=0
-                     n_rej=0
-
-                   
                  do i=1,n
-c                     write(*,*)gi_c(i)
-                    write(17,771)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
-     &               ysi_c(i),vel_c(i),
-     &              fb_c(i),bb(i),bd(i),gi_c(i),likes_c(i),sg_c(i),
-     &              sz_c(i),comp_c(i),bin_c(i),i_c(i)
-
 
                    bb(i)=e**(bb(i))
                    bd(i)=e**(bd(i))
                    ftot(i)=(bb(i)/(bb(i)+bd(i)))
-                   
-                   
-                   if(comp_c(i).ge.0) ntot_gc=ntot_gc+1
 
-              do h=1,nbin
-                 
-                
+c                     write(*,*)gi_c(i)
+                    write(17,771)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
+     &               ysi_c(i),vel_c(i),
+     &              ftot(i),bb(i),bd(i),gi_c(i),likes_c(i),sg_c(i),
+     &              sz_c(i),comp_c(i),bin_c(i),i_c(i)
+                    
 
+                   write(*,*)likes_c(i),comp_c(i)
 
-                     if((int(rgal(h-1)).lt.int(rs(i))).and.
-     &                    (int(rs(i)).le.int(rgal(h))))then
+                   if(likes_c(i).le.-6.85)comp_c(i)=5
 
-              if(likes_c(i).le.ll(h))comp_c(i)=5
-c.and.(comp_c(i).eq.1))comp_c(i)=5
-
-                  if(comp_c(i).eq.5)n_rej=n_rej+1
-
-                   if(comp_c(i).ne.5)then
-                      write(*,*)'gi_c',gi_c(i)
-                      if(gi_c(i)>=0.55)then
-                      tot_red_disk=tot_red_disk+(1-ftot(i))
-                      tot_red=tot_red+1
-                      tot_red_bulge=tot_red_bulge+ftot(i)
-                      endif
-                         if(gi_c(i)<=0.55)then
-                          tot_blue_disk=tot_blue_disk+(1-ftot(i))
-                          tot_blue=tot_blue+1
-                          tot_blue_bulge=tot_blue_bulge+ftot(i)
-                          endif
-                          endif
-                          endif
-
-c                   write(*,*)likes_c(i),comp_c(i)
-
-c                   if(likes_c(i).le.-6.85)comp_c(i)=5
-
-
-c                     write(20,772)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
-c     &              vel_c(i),
-c     &              fb_c(i),ftot(i),gi_c(i),comp_c(i),bin_c(i),i_c(i),
-c     &               likes_c(i),sm_c(i)
-
-                    enddo
-                    write(20,772)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
+                     write(20,772)ra_c(i),dec_c(i),xs_c(i),ys_c(i),
      &              vel_c(i),
-     &              fb_c(i),ftot(i),gi_c(i),comp_c(i),bin_c(i),i_c(i),
-     &               likes_c(i),sm_c(i)
-
-
-
+     &              fb_c(i),ftot(i),gi_c(i),comp_c(i),bin_c(i),i_c(i)
                     enddo
 
-                   write(*,*)'red=',tot_red,'red_d=',tot_red_disk,
-     &                       'red_bulge=',tot_red_bulge,
-     &                        'blue=',tot_blue,'blue_d=',tot_blue_disk,
-     &                       'blue_bulge=',tot_blue_bulge,
-     &                   'tot=',ntot_gc,'rej=',n_rej,
-     &                    ntot_gc-n_rej,tot_red+tot_blue
+
+                    
 c                     do i=1,n
 c                   write(17,771)xs_c(i),ys_c(i),ysi_c(i),vel_c(i),
 c     &              fb_c(i),bb(i),bd(i),likes_c(i),bin_c(i),i_c(i)
@@ -554,7 +486,7 @@ c                    enddo
 
 
  771           format(2(1x,f8.4),14(1x,f8.2))
- 772          format(2(1x,f8.4),11(1x,f8.2))
+ 772          format(2(1x,f8.4),9(1x,f8.2))
 c 778           format(8(1x,f8.2))
                
                close(10)

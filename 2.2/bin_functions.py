@@ -370,6 +370,12 @@ def read_gc(gal):
     i = float(inp[2])*u.deg
     pa = float(inp[3])*u.deg
     d = float(inp[11])*u.mpc
+    vdisk_pne = float(inp[13])
+    vmax = float(inp[14])
+    vmin = float(inp[15])
+    s_sph_pne = float(inp[16])
+    s_max = float(inp[17])
+    s_min = float(inp[18])
     #re = float(inp[12])
     
     RA = np.loadtxt(galcat, usecols=(1,))
@@ -378,7 +384,7 @@ def read_gc(gal):
     DEC = DEC*u.deg
     
     #inps = [RAgal, DECgal, i, pa, d, c_sep, re]
-    inps = [RAgal, DECgal, i, pa, d, c_sep]
+    inps = [RAgal, DECgal, i, pa, d, c_sep, vdisk_pne, vmax, vmin, s_sph_pne, s_max, s_min]
     return RA, DEC, inps
     
     

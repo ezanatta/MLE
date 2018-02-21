@@ -46,7 +46,8 @@ def count_col(cat, c_sep):
         if item >= c_sep:
             cont=cont+1
     print 'number of reds:', cont
-    print 'number of blues:', len(col)-cont            
+    print 'number of blues:', len(col)-cont
+    print 'number of all: ', len(col)            
     
     
 def run_ml():
@@ -155,7 +156,7 @@ with open('current_galaxy.dat', 'w+') as current:
     print >>current, gal 
     
 RA, DEC, i, PA, c, n, Re, Rd, ue, ud, V, d = read_inputs(galinput)
-PA = PA
+PA = 120
 
 coor = SkyCoord(RA, DEC)
 
@@ -186,9 +187,12 @@ gal_cat = '/home/emilio/MLE/Galaxies/'+gal+'/N'+gal+'GC.dat'
 f_file = '/home/emilio/MLE/Galaxies/'+gal+'/N'+gal+'_f.GC.dat'
 cat_name = '/home/emilio/MLE/2.5/input_catalogue.dat'
 f_name = '/home/emilio/MLE/2.5/ffile.dat'
+lcut_file = '/home/emilio/MLE/pne_likes/lcut_'+gal+'.dat'
+lcut_name = '/home/emilio/MLE/2.5/lcut.dat'
 
 shutil.copyfile(gal_cat, cat_name)
 shutil.copyfile(f_file, f_name)
+shutil.copyfile(lcut_file, lcut_name)
 
 count_col(gal_cat, c)
 

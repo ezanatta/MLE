@@ -307,34 +307,44 @@ def atokpc(R, d):
 
 RA, DEC, ins = read_gc(gal)  
 d = ins[4]
+xaux = np.linspace(0, 80, 100)
+v = np.full(100,ins[6])
+vmax = ins[7]
+vmin = ins[8]
+s = np.full(100, ins[9])
+smax = ins[10]
+smin = ins[11]
 
 if op=='y':
 
     gV, gVerr_min, gVerr_max, gsigma, gsigmaerr_min, gsigmaerr_max, gR, gRmin, gRmax = load_like_uni('GC')
-   # pV, pVerr_min, pVerr_max, psigma, psigmaerr_min, psigmaerr_max, pR, pRmin, pRmax = load_like_uni('PNe')  
+    pV, pVerr_min, pVerr_max, psigma, psigmaerr_min, psigmaerr_max, pR, pRmin, pRmax = load_like_uni('PNe')  
 
         
     plot1 = plt.subplot(2, 1, 1)
-    #plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None', label='PNe')    
-    plt.errorbar(gR, gV, marker='o', xerr=[gRmin, gRmax], yerr=[gVerr_min, gVerr_max], color='purple', linestyle='None', label='All GCs')
-    #plt.plot((ins[6],ins[6]), (0,450), 'k--') 
+    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
+    plt.plot((0,16), (v,v), 'k--', lw=0.5)
+    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None', label='PNe')    
+    plt.errorbar(gR, gV, marker='o', xerr=[gRmin, gRmax], yerr=[gVerr_min, gVerr_max], color='purple', linestyle='None', label='All GCs') 
     plt.ylabel('V (km/s)', fontdict=font)
     plt.ylim(0, 250)
-    plt.xlim(0, 12)
+    plt.xlim(0, 16)
     plt.legend(loc='upper left', numpoints=1)
     
     plot4 = plt.subplot(2, 1, 2)
-   # plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
+    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
+    plt.plot((0,16), (s,s), 'k--', lw=0.5)
+    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
     plt.errorbar(gR, gsigma ,marker='o', xerr=[gRmin, gRmax], yerr=[gsigmaerr_min, gsigmaerr_max], color='purple', linestyle='None')
-    #plt.plot((ins[6],ins[6]), (0,450), 'k--')
+    #plt.plot((0,16), (ins[6],ins[6]), 'k--')
     plt.ylabel('$\sigma$ (km/s)', fontdict=font)
     plt.xlabel('R ($kpc$)', fontdict=font)
-    plt.ylim(0, 300)
-    plt.xlim(0, 12)    
+    plt.ylim(0, 80)
+    plt.xlim(0, 16)    
     
-    loc = plticker.MultipleLocator(base = 1.0)
+    loc = plticker.MultipleLocator(base = 5.0)
     loc2 = plticker.MultipleLocator(base = 40.0)
-    loc3 = plticker.MultipleLocator(base = 40.0)    
+    loc3 = plticker.MultipleLocator(base = 15.0)    
     plot1.yaxis.set_major_locator(loc2)
     plot4.xaxis.set_major_locator(loc)
     plot1.xaxis.set_major_locator(loc)
@@ -342,6 +352,7 @@ if op=='y':
     plt.setp(plot1.get_xticklabels(), visible=False)
     
     plt.subplots_adjust(hspace=.0001)
+    plt.savefig('7457like.png', dpi=300)
     plt.show()
     
     
@@ -390,6 +401,10 @@ if op=='y':
     plt.show()   
     
 else:    
+    if gal == '2768':
+        xmax = 74
+    if gal == '3115':
+        xmax = 33
     
     V, Verr_min, Verr_max, sigma, sigmaerr_min, sigmaerr_max, R, Rmin, Rmax = load_like_bi('allGC')
     V_r, Verr_r_min, Verr_r_max, sigma_r, sigmaerr_r_min, sigmaerr_r_max, R_r, Rmin_r, Rmax_r = load_like_bi('redGC')
@@ -397,54 +412,66 @@ else:
     pV, pVerr_min, pVerr_max, psigma, psigmaerr_min, psigmaerr_max, pR, pRmin, pRmax = load_like_uni('PNe')
     
     plot1 = plt.subplot(2, 3, 1)
+    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)
     plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None', label='PNe') 
     plt.errorbar(R, V, marker='o', xerr=[Rmin, Rmax], yerr=[Verr_min, Verr_max], color='purple', linestyle='None', label='All GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')   
     plt.ylabel('V (km/s)', fontdict=font)
     plt.ylim(0, 450)
-    plt.xlim(0, 33)      
+    plt.xlim(0, xmax)      
     plt.legend(loc='upper left', numpoints=1)
     
     plot2 = plt.subplot(2, 3, 2)
+    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)    
     plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
     plt.errorbar(R_r, V_r,marker='o', xerr=[Rmin_r, Rmax_r], yerr=[Verr_r_min, Verr_r_max], color='red', linestyle='None', label='Red GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
-    plt.xlim(0, 33)      
+    plt.xlim(0, xmax)      
     plt.legend(loc='upper left', numpoints=1)
     
     plot3 = plt.subplot(2, 3, 3)
+    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)    
     plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
     plt.errorbar(R_b, V_b,marker='o', xerr=[Rmin_b, Rmax_b], yerr=[Verr_b_min, Verr_b_max], color='blue', linestyle='None', label='Blue GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
-    plt.xlim(0, 33)      
+    plt.xlim(0, xmax)      
     plt.legend(loc='upper left', numpoints=1)
     
     plot4 = plt.subplot(2, 3, 4)
+    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
     plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
     plt.errorbar(R, sigma,marker='o', xerr=[Rmin, Rmax], yerr=[sigmaerr_min, sigmaerr_max], color='purple', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylabel('$\sigma$ (km/s)', fontdict=font)
     plt.ylim(0, 450)
-    plt.xlim(0, 33)
+    plt.xlim(0, xmax)
     
     plot5 = plt.subplot(2, 3, 5)
+    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
     plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
     plt.errorbar(R_r, sigma_r,marker='o', xerr=[Rmin_r, Rmax_r], yerr=[sigmaerr_r_min, sigmaerr_r_max], color='red', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.xlabel('R (kpc)', fontdict=font)
     plt.ylim(0, 450)
-    plt.xlim(0, 33)
+    plt.xlim(0, xmax)
     
     plot6 = plt.subplot(2, 3, 6)
+    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
+    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
     plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
     plt.errorbar(R_b, sigma_b,marker='o', xerr=[Rmin_b, Rmax_b], yerr=[sigmaerr_b_min, sigmaerr_b_max], color='blue', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
-    plt.xlim(0, 33)    
+    plt.xlim(0, xmax)    
     
-    loc = plticker.MultipleLocator(base = 5.0)
+    loc = plticker.MultipleLocator(base = 15.0)
     loc2 = plticker.MultipleLocator(base=100.0)
     loc3 = plticker.MultipleLocator(base = 100.0)
     plot1.yaxis.set_major_locator(loc3)
@@ -470,6 +497,7 @@ else:
     
     plt.subplots_adjust(hspace=.0001)
     plt.subplots_adjust(wspace=.0001)
+    plt.savefig('2768like.png', dpi=300)
     plt.show()
 ########################################## new plot
     
