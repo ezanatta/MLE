@@ -88,7 +88,7 @@ c        Dsc=0
 
       ai=incl
  
-      pa_rad=(-45.4+180)*pi/180      
+      pa_rad=(pa)*pi/180      
 
        i_rad=ai*pi/180
 

@@ -3,7 +3,7 @@ def binning(RA, DEC, V, galcenter, pa, i, nbins, op):
      from astropy import units as u
      from astropy.coordinates import SkyCoord
      
-     pa = pa+90.00*u.deg
+     
      pa_rad = pa.to(u.rad)
      pa_rad = pa_rad.value
 
@@ -48,7 +48,7 @@ def binning(RA, DEC, V, galcenter, pa, i, nbins, op):
      yd = ((ys)/np.sqrt(cos_i))
      
      r=np.sqrt((xs**2)*cos_i+((ys**2)/cos_i))   #distributing the GC along the radius
-     
+     #r = np.sqrt((xd**2)+(yd**2))
      
      
 #     plt.plot(xs, ys, 'bo')

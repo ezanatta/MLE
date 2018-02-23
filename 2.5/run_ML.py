@@ -88,10 +88,10 @@ def run_prob_f(ver):
     with open('prob_input.dat', 'w+') as f:
         print >>f, xp, yp, xss, yss, ps, ra, dec, PA, i, V, nbins 
         
-    if ver == 'd':
+    if ver == 'b':
         os.system('gfortran -o prob_a.out prob_bd_3115.f')
         os.system('./prob_a.out')
-    if ver =='b':
+    if ver =='d':
         os.system('gfortran -o prob_b.out prob_bd_bulge.f')
         os.system('./prob_b.out')
     
@@ -156,7 +156,7 @@ with open('current_galaxy.dat', 'w+') as current:
     print >>current, gal 
     
 RA, DEC, i, PA, c, n, Re, Rd, ue, ud, V, d = read_inputs(galinput)
-PA = 120
+PA = PA+90
 
 coor = SkyCoord(RA, DEC)
 

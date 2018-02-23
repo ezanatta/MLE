@@ -78,16 +78,16 @@ c     reading parameters
         Decc=0
         nbin=0
 
-      read(21,*)xp,yp,xss,yss,ps,Rc,Rmc,Rsc,Dc,Dmc,Dsc,pa,incl,vned,nbin
+      read(21,*)xp,yp,xss,yss,ps,radeg,decdeg,pa,incl,vned,nbin
 
       ai=incl
  
-      pa_rad=(pa+180)*pi/180      
+      pa_rad=(pa)*pi/180      
 
        i_rad=ai*pi/180
 
        write(*,*)' i_rad=',i_rad,' i_deg=',ai, 'pa= ', pa
-       write(*,*) xp,yp,Rc,Rmc,Rsc,Dc,Dmc,Dsc
+       write(*,*) xp,yp,radeg, decdeg
 
        cos_i=COS(i_rad)
        sin_i=SIN(i_rad)
@@ -132,18 +132,19 @@ c   Read coordinate ra and dec in arcsec
           comp(i)=0
 
         gi(i)=b(i)-ri(i)
-        write(*,*)'gi',gi(i)
+
+c        write(*,*)'gi',gi(i)
 
      
 
-          Racc=Rc*3600 + Rmc*60 + Rsc
-          Decc=Dc*3600 + Dmc*60 + Dsc
+          Racc=radeg*3600
+          Decc=decdeg*3600
 
 c          write(*,*)Racc, Decc
 
          xm(i)=0
 c         ra(i)=(rah(i)+ram(i)/60+ras(i)/3600)*15
-          xm(i)=( ra(i)/15*3600 )-Racc
+          xm(i)=( ra(i)*3600 )-Racc
 c           xm(i)=( ra(i))-Racc
     
          ym(i)=0
@@ -155,7 +156,7 @@ c         ym(i)=dec(i) - Decc
           y_rad=Decc*pi/(3600*180)
          
 
-          xm(i)=xm(i)*15*cos(y_rad)
+          xm(i)=xm(i)*cos(y_rad)
 c            xm(i)=xm(i)*15
 c            open(56,file="1023_PNe_f.cat",status="unknown")
 c            write(56,556)ra(i),dec(i),vel(i),fb(i)
@@ -177,7 +178,7 @@ c     minor axis
 c     major axis
           ys(i)=xm(i)*SIN(pa_rad) + ym(i)*COS(pa_rad)
 
-
+          write(*,*) 'xs = ', xs(i), 'ys = ', ys(i)
 c     average velocity & sigma
         
           av=av+vel(i)

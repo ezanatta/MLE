@@ -70,7 +70,9 @@ def pne_radius(RA, DEC, gc, pa, i):
 
 
      cos_i = np.cos(i.to(u.rad))
-     yrad = np.cos(gc.dec.radian)  
+     yrad = np.cos(gc.dec.radian)
+
+     print 'cos(DECg) = ', yrad
      
      for i in range(0,len(RA)):
          aux = SkyCoord(RA[i]*u.deg, DEC[i]*u.deg)             #reading RA and DEC from GC
@@ -87,7 +89,7 @@ def pne_radius(RA, DEC, gc, pa, i):
      xsi = xsi*np.sqrt(cos_i)
      #ysi = ysi/np.sqrt(cos_i)
      
-     return xsi, -ysi
+     return xsi, ysi
      
 def atokpc(R, d):
     Dkpc = (d.value*np.pi*R)/648
@@ -95,8 +97,10 @@ def atokpc(R, d):
      
 
 gal = raw_input('Type Galaxy number:')
-op = raw_input('Do we have GC? y/n: ')
-op2 = raw_input('Do we have PNe? y/n: ')
+#op = raw_input('Do we have GC? y/n: ')
+#op2 = raw_input('Do we have PNe? y/n: ')
+op='y'
+op2='y'
 
 galinput = 'N'+gal+'input.dat'
 galinput = '/home/emilio/MLE/Galaxies/'+gal+'/'+galinput
@@ -141,17 +145,18 @@ if op == 'y' and op2 == 'y':
     Vp = Vp-Vsys
     
     
-#    opp = 0.0*u.deg
-#    while opp!='-1':    
+    opp = 0.0*u.deg
+    while opp!='-1':    
     
-    px, py = pne_radius(RAp.value, DECp.value, galcenter, pa, i)
-    gx, gy = pne_radius(RA.value, DEC.value, galcenter, pa, i)            
+        px, py = pne_radius(RAp.value, DECp.value, galcenter, pa, i)
+        gx, gy = pne_radius(RA.value, DEC.value, galcenter, pa, i)            
         
-#        plt.scatter(px, py, c=Vp, cmap='rainbow', vmin=np.min(Vp), vmax=np.max(Vp))
-#        plt.show()
-#        
-#        opp = raw_input('try another PA? Enter value or type ''-1'' to continue: ')
-#        pa = np.float(opp)*u.deg
+        plt.scatter(gx, gy, c=V, cmap='rainbow', vmin=np.min(V), vmax=np.max(V))
+        plt.show()
+        
+        print 'current PA: ', pa
+        opp = raw_input('try another PA? Enter value or type ''-1'' to continue: ')
+        pa = np.float(opp)*u.deg
         
     fb = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(5,))
     vfb = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(4,))
@@ -255,6 +260,13 @@ if op == 'y' and op2 == 'y':
     print(len(rdiskblue)+len(rdiskred))
     print(len(rsphblue)+len(rsphred))
     
+    if gal == '2768':
+        xmaxi = 40
+    elif gal == '3115':
+        xmaxi = 20
+    elif gal == '7457':
+        xmaxi = 17
+
     if c_sep != -1000:
         #plt.plot(np.sqrt(xs**2+ys**2), vfb, marker='o', color='purple', linestyle='None', label='GC')
 #        plt.plot(rred, Vred, marker='o', color='red', linestyle='None')
@@ -265,11 +277,12 @@ if op == 'y' and op2 == 'y':
         plt.plot(rsphred, vsphred, markersize=8, marker='o', color='red', linestyle='None')
         plt.plot(rsphblue, vsphblue, markersize=8, marker='o', color='blue', linestyle='None') 
         plt.plot(np.sqrt(xrej**2+yrej**2), vrej, markersize=10, color='black', marker='x',linestyle='None', label='Rejected GC')
-        plt.xlim(0, 40)
+        plt.xlim(0, xmaxi)
         plt.ylabel('$\Delta$V $(km/s)$', fontdict=font)
         plt.xlabel('R $(kpc)$', fontdict=font)
         plt.plot((0, xmax),(0, 0), ':', label='Galaxy Systemic Velocity', color='black')
         #plt.legend(loc='upper right', prop={'size':10})
+        plt.savefig(gal+'phasespace.png', dpi=300)
         plt.show()  
         
         #    plt.scatter(xs, vfb, c=fb, cmap='Greys_r', vmin=0.0, vmax=1.0)
@@ -281,7 +294,7 @@ if op == 'y' and op2 == 'y':
         plt.plot(xsphblue, vsphblue, markersize=8, marker='o', color='blue', linestyle='None')      
         plt.plot((-700, 700),(0, 0), ':', label='Galaxy Systemic Velocity', color='black')
         plt.plot((0, 0),(-700, 700), ':', color='black')
-        plt.xlim(-40, 40)
+        plt.xlim(-xmaxi, xmaxi)
         plt.ylim(-500, 500)
         plt.plot(yrej, vrej, color='black', markersize=10,marker='x',linestyle='None', label='Rejected GC') 
         plt.ylabel('$\Delta$V $(km/s)$', fontdict=font)
@@ -289,6 +302,7 @@ if op == 'y' and op2 == 'y':
     #    cb = plt.colorbar(fraction=0.05)
     #    cb.set_label('$L_{Sph}(v_{i}, f_{i})$')
         #plt.legend(loc='upper right', prop={'size':10})
+        plt.savefig(gal+'crossspace.png', dpi=300)
         plt.show()
         
         fig3 = plt.subplot(1, 1, 1)
@@ -299,6 +313,7 @@ if op == 'y' and op2 == 'y':
         fig3.set_ylabel('R$(kpc)$', fontsize=20)
         cb = plt.colorbar(fraction=0.05)
         cb.set_label('$L_{Sph}(v_{i}, f_{i})$', fontsize=20)
+        plt.savefig(gal+'rcolf.png', dpi=300)
         plt.show()
         
         fig4, ax1 = plt.subplots()
@@ -315,10 +330,11 @@ if op == 'y' and op2 == 'y':
     #    plt.plot(rp, Vordp, marker='o', markerfacecolor='None', markeredgecolor='green', linestyle='None', label= 'PNe')
         plt.ylabel('$\Delta$V $(km/s)$', fontdict=font)
         plt.xlabel('R $(kpc)$', fontdict=font)
-        plt.xlim(0, 25)
+        plt.xlim(0, xmaxi)
         plt.plot(np.sqrt(xrej**2+yrej**2), vrej, markersize=10, color='black', marker='x',linestyle='None', label='Rejected GC')
         plt.plot((0, xmax),(0, 0), '--', label='Galaxy Systemic Velocity', color='black')
         #plt.legend(loc='upper right', prop={'size':10})
+        plt.savefig(gal+'phasespace.png', dpi=300)
         plt.show()  
           
     
@@ -330,7 +346,7 @@ if op == 'y' and op2 == 'y':
 #        plt.plot(xsphblue, vsphblue, marker='o', color='blue', linestyle='None')      
         plt.plot((-700, 700),(0, 0), ':', label='Galaxy Systemic Velocity', color='black')
         plt.plot((0, 0),(-700, 700), ':', color='black')
-        plt.xlim(-20, 20)
+        plt.xlim(-xmaxi, xmaxi)
         plt.ylim(-500, 500)
         plt.plot(yrej, vrej, color='black', markersize=10,marker='x',linestyle='None', label='Rejected GC') 
         plt.ylabel('$\Delta$V $(km/s)$', fontdict=font)
@@ -338,6 +354,7 @@ if op == 'y' and op2 == 'y':
     #    cb = plt.colorbar(fraction=0.05)
     #    cb.set_label('$L_{Sph}(v_{i}, f_{i})$')
         #plt.legend(loc='upper right', prop={'size':10})
+        plt.savefig(gal+'crossspace.png', dpi=300)
         plt.show()
         
         fig3 = plt.subplot(1, 1, 1)
@@ -348,6 +365,7 @@ if op == 'y' and op2 == 'y':
         fig3.set_ylabel('R$(kpc)$')
         cb = plt.colorbar(fraction=0.05)
         cb.set_label('$L_{Sph}(v_{i}, f_{i})$')
+        plt.savefig(gal+'rcolf.png', dpi=300)
         plt.show()
         
 
