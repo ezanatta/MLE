@@ -328,7 +328,9 @@ def color_dist(colour):
 
 def bin_kpc(RA, DEC, RAgal, DECgal, d, nbins):
       from astropy.coordinates import SkyCoord
-      
+      from astropy import units as u
+      print 'calculating galactocentric radius..'  
+      d = d.to(u.kpc) 
       n = len(RA)
       
       dist = list()
@@ -369,7 +371,7 @@ def read_gc(gal):
     DECgal = inp[1]
     i = float(inp[2])*u.deg
     pa = float(inp[3])*u.deg
-    d = float(inp[11])*u.mpc
+    d = float(inp[11])*u.Mpc
     vdisk_pne = float(inp[13])
     vmax = float(inp[14])
     vmin = float(inp[15])
@@ -386,6 +388,20 @@ def read_gc(gal):
     #inps = [RAgal, DECgal, i, pa, d, c_sep, re]
     inps = [RAgal, DECgal, i, pa, d, c_sep, vdisk_pne, vmax, vmin, s_sph_pne, s_max, s_min]
     return RA, DEC, inps
+    
+def read_pne(gal):
+    import numpy as np
+    from astropy import units as u  
+    
+    galcat = 'N'+gal+'PNE.dat' 
+    galcat = '/home/emilio/MLE/Galaxies/'+gal+'/'+galcat
+    
+    RA = np.loadtxt(galcat, usecols=(1,))
+    DEC = np.loadtxt(galcat, usecols=(2,))
+    RA = RA*u.deg
+    DEC = DEC*u.deg
+
+    return RA, DEC  
     
     
     
