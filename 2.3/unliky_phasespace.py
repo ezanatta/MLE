@@ -6,6 +6,7 @@ from astropy import units as u
 import sys
 sys.path.insert(0, '/home/emilio/MLE/2.2/')
 from bin_functions import binning
+import os.path
 
 class pf(float):
     def __repr__(self):
@@ -60,7 +61,7 @@ def read_catalog_stars(starcat):
 
     
 def pne_radius(RA, DEC, gc, pa, i):
-     
+
      pa = pa
      pa_rad = pa.to(u.rad)
      pa_rad = pa_rad.value  
@@ -70,7 +71,7 @@ def pne_radius(RA, DEC, gc, pa, i):
 
 
      cos_i = np.cos(i.to(u.rad))
-     yrad = gc.dec*np.pi/(3600*180)
+     yrad = np.cos(gc.dec.radian)
 
     # print 'cos(DECg) = ', yrad
      
@@ -81,7 +82,7 @@ def pne_radius(RA, DEC, gc, pa, i):
          
      xm = (ra - gc.ra.arcsec)
      ym = (dec - gc.dec.arcsec)
-     xm = xm*np.cos(yrad)
+     xm = xm*yrad
      
      xsi = xm*np.cos(pa_rad)-ym*np.sin(pa_rad)
      ysi = xm*np.sin(pa_rad)+ym*np.cos(pa_rad)
@@ -89,7 +90,7 @@ def pne_radius(RA, DEC, gc, pa, i):
      xsi = xsi*np.sqrt(cos_i)
      ysi = ysi/np.sqrt(cos_i)
      
-     return xsi, ysi
+     return -xsi, ysi
      
 def atokpc(R, d):
     from astropy.cosmology import WMAP9 as cosmo
@@ -153,15 +154,30 @@ if op == 'y' and op2 == 'y':
     RAp, DECp, Vp = read_catalog_pne(galcatpne) 
     Vp = Vp-Vsys
     
-    RA = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(0,))
-    DEC = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(1,))    
-    fb = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(5,))
-    vfb = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(4,))
-    xs = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(2,))
-    ys = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(3,))
-    colf = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(7,))
-    like = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(8,))
+    op = raw_input('which backup? ')
     
+    if os.path.exists('../2.5/N'+gal+'/backup'+op+'/prob_out.dat'):
+        
+        RA = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(0,))
+        DEC = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(1,))
+        fb = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(5,))
+        vfb = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(4,))
+        #xs = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(2,))
+        #ys = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(3,))
+        colf = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(7,))
+        like = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/prob_out.dat', usecols=(8,))
+        
+    elif os.path.exists('../2.5/N'+gal+'/backup'+op+'/unliky.dat'):  
+        
+        RA = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(0,))
+        DEC = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(1,))
+        fb = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(6,))
+        vfb = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(5,))
+        #xs = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(2,))
+        #ys = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(3,))
+        colf = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(9,))
+        like = np.loadtxt('../2.5/N'+gal+'/backup'+op+'/unliky.dat', usecols=(13,))
+
     opp = 0.0*u.deg
     while opp!='-1':    
     
@@ -174,7 +190,7 @@ if op == 'y' and op2 == 'y':
         print 'current PA: ', pa
         #opp = raw_input('try another PA? Enter value or type ''-1'' to continue: ')
         opp = '-1'
-        pa = np.float(opp)*u.deg
+        pa = np.float(opp)*u.deg        
 #    ys = ys/np.sqrt(np.cos(i.to(u.rad)))
 
 #    gx = map(pf, gx)
@@ -272,12 +288,12 @@ if op == 'y' and op2 == 'y':
     print(len(rsphblue)+len(rsphred))
     
     if gal == '2768':
-        xmaxi = 90
+        xmaxi = 60
         colmax = 1.2
         colmin = 0.2
         col_label = '(Rc-z)'
     elif gal == '3115':
-        xmaxi = 35
+        xmaxi = 45
         col_label='(g-i)'
         colmin=0.6
         colmax=1.4
@@ -363,7 +379,7 @@ if op == 'y' and op2 == 'y':
         plt.plot((0, 0),(-700, 700), ':', color='black')
         plt.xlim(-8, 8)
         plt.ylim(-150, 200)
-        plt.plot(yrej, vrej, color='black', markersize=10,marker='h',linestyle='None', label='Rejected GC') 
+        plt.plot(yrej, vrej, color='black', markersize=10,marker='x',linestyle='None', label='Rejected GC') 
         plt.ylabel('$\Delta$V $(km/s)$', fontdict=font)
         plt.xlabel('$\Delta$x $(kpc)$', fontdict=font)
     #    cb = plt.colorbar(fraction=0.05)
@@ -383,69 +399,3 @@ if op == 'y' and op2 == 'y':
         plt.savefig(gal+'rcolf.png', dpi=300)
         plt.show()
         
-
-if op == 'y' and op2 != 'y':
-    galcatgc = 'N'+gal+'GC.dat'    
-    
-    galcatgc = '/home/emilio/MLE/Galaxies/'+gal+'/'+galcatgc
-    
-    with open(galinput, 'r') as f:
-        inp = [x.split(' ')[0] for x in open(galinput).readlines()]
-        
-    c_sep = float(inp[4])
-    
-    RAgal = inp[0]
-    DECgal = inp[1]
-    i = float(inp[2])*u.deg
-    pa = float(inp[3])*u.deg
-    Vsys = float(inp[10])
-    
-    galcenter = SkyCoord(RAgal, DECgal)
-    
-    RA, DEC, V, col = read_catalog_gc(galcatgc)
-    
-    nbin = 6
-
-    r, rbin, Vord = binning(RA, DEC, V, galcenter, pa, i, nbin, 'N')
-    
-    xmax = max(r)+200
-    
-    plt.plot(r, Vord, marker='o', markeredgecolor='purple', markerfacecolor='None', linestyle='None', label='GC')
-    plt.ylabel('V $(km/s)$')
-    plt.xlabel('R $(arcsec)$')
-    plt.plot((0, xmax),(Vsys, Vsys), '--', label='Galaxy Systemic Velocity')
-    plt.legend(loc='upper right', prop={'size':10})
-    plt.show()
-
-if op != 'y' and op2 == 'y':   
-    galcatpne = 'N'+gal+'PNE.dat'
-    
-    galcatpne = '/home/emilio/MLE/Galaxies/'+gal+'/'+galcatpne
-    
-    with open(galinput, 'r') as f:
-        inp = [x.split(' ')[0] for x in open(galinput).readlines()]
-        
-    c_sep = float(inp[4])
-    
-    RAgal = inp[0]
-    DECgal = inp[1]
-    i = float(inp[2])*u.deg
-    pa = float(inp[3])*u.deg
-    Vsys = float(inp[10])
-    
-    galcenter = SkyCoord(RAgal, DECgal)
-    
-    RAp, DECp, Vp = read_catalog_pne(galcatpne) 
-    
-    nbinp = 8
-    
-    rp, rbinp, Vordp = binning(RAp, DECp, Vp, galcenter, pa, i, nbinp, 'N')
-    
-    xmax = max(rp)+200
-    
-    plt.plot(rp, Vordp, marker='o', color='lightgreen', linestyle='None', label= 'PNe')
-    plt.ylabel('V $(km/s)$')
-    plt.xlabel('R $(arcsec)$')
-    plt.plot((0, xmax),(Vsys, Vsys), '--', label='Galaxy Systemic Velocity')
-    plt.legend(loc='upper right', prop={'size':10})
-    plt.show() 

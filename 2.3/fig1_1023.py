@@ -46,7 +46,31 @@ def read_catalog_stars(starcat):
 	RAs[i], DECs[i] = c.ra.degree, c.dec.degree
     
     return RAs, DECs    
+    
+def get_rej():
+    RA = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(0,))
+    DEC = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(1,))
+    like = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(8,))
+    
+    RArej = []
+    DECrej = []
+    RAc = []
+    DECc = []    
+    
+    for i in range(0, len(RA)):
+        if like[i]==5.00:
+            RArej.append(RA[i])
+            DECrej.append(DEC[i])
+        else:
+            RAc.append(RA[i])
+            DECc.append(DEC[i])
 
+    RArej = np.asarray(RArej)
+    DECrej = np.asarray(DECrej)
+    RAc = np.asarray(RAc)
+    DECc = np.asarray(DECc)
+
+    return RArej, DECrej, RAc, DECc
 
 gal = raw_input('Enter the galaxy number: ')
 galinput = galaxy_inputs(gal)
@@ -57,6 +81,8 @@ stars = '/home/emilio/MLE/Galaxies/'+gal+'/'+'N'+gal+'STARS.dat'
 op = raw_input('Do we have GC? y/n: ')
 op2 = raw_input('Do we have PNe? y/n: ')
 op3 = raw_input('Do we have Stars? y/n: ')
+
+op4 = raw_input('plot rejections of 3115? y/n: ')
 
 if op == 'y':
     RA, DEC = read_catalog_gc(gc)
@@ -73,6 +99,14 @@ if op3 == 'y':
     coords_star = zip(RAstar, DECstar)
     ra_star = []
     dec_star = []
+if op4 == 'y':
+    RAr, DECr, RAgc, DECgc = get_rej()
+    coordsGCrej = zip(RAr, DECr)
+    coordsGCconf = zip(RAgc, DECgc)
+    ra_rej = []
+    dec_rej = []
+    ra_conf = []
+    dec_conf = []
 
 fits_file = '/home/emilio/MLE/Galaxies/'+gal+'/'+'fits-null.fits'
 hdu = fits.open(fits_file)[0]
@@ -83,7 +117,10 @@ if op == 'y':
 if op3 =='y':                                                    #here we transform the RA and DEC coords in pixel coords 
     pix_star = wcs.wcs_world2pix(coords_star, 1)                #to overplot on the fits file in the right places. 
 if op2 == 'y':
-    pix_pne = wcs.wcs_world2pix(coordsPNE, 1)                   #This is done using the WCS loaded before.
+    pix_pne = wcs.wcs_world2pix(coordsPNE, 1)
+if op4 == 'y':
+    pix_rej = wcs.wcs_world2pix(coordsGCrej, 1)
+    pix_conf = wcs.wcs_world2pix(coordsGCconf, 1)                   #This is done using the WCS loaded before.
                                                             #so it is important that the fits you used had the WCS.
 
 #if you really need to use a fits file without WCS (like when you plot the f-map), check how it is done in gen_cat.py
@@ -98,7 +135,16 @@ if op3 =='y':
 if op2 == 'y':
     for i in range(0, len(pix_pne)):
         ra_pne.append(pix_pne[i][0])
-        dec_pne.append(pix_pne[i][1])    
+        dec_pne.append(pix_pne[i][1])   
+if op4 == 'y':
+    for i in range(0, len(pix_rej)):
+        ra_rej.append(pix_rej[i][0])
+        dec_rej.append(pix_rej[i][1])
+    for i in range(0, len(pix_conf)):
+        ra_conf.append(pix_conf[i][0])
+        dec_conf.append(pix_conf[i][1])
+
+
 
 if op == 'y' and op2 == 'y' and op3 == 'y':
     allgc = plt.subplot(1,1,1, projection=wcs)
@@ -135,6 +181,16 @@ if op == 'y' and op2 != 'y' and op3 != 'y':
     plt.imshow(hdu.data, origin='lower',cmap='gray_r') #you can change the contrast in the cmap options.
     plt.plot(ra, dec, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='magenta', label='GCs')
     plt.legend(loc='lower right')
+    plt.xlabel('RA')
+    plt.ylabel('DEC')
+    plt.show()
+    
+if op4=='y':
+    allgc = plt.subplot(1,1,1, projection=wcs)
+    plt.imshow(hdu.data, origin='lower',cmap='gray_r') #you can change the contrast in the cmap options.
+    plt.plot(ra_conf, dec_conf, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='black', label='All GCs')
+    plt.plot(ra_rej, dec_rej, marker='h',ms=8,markerfacecolor='red', linestyle='none', markeredgewidth=1, markeredgecolor='white', label='Rejected GCs')    
+    plt.legend(loc='lower right', prop={'size':10})
     plt.xlabel('RA')
     plt.ylabel('DEC')
     plt.show()

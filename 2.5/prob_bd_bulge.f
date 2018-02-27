@@ -200,7 +200,7 @@ c     obtaining the inclination angle and correct coordinates
        do i=1,n
           
           
-          xsi(i)=-xs(i)*sqrt(cos_i)
+          xsi(i)=xs(i)*sqrt(cos_i)
           ysi(i)=ys(i)/sqrt(cos_i)
           rs(i)=sqrt(xsi(i)**2+ysi(i)**2)
 

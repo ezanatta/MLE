@@ -156,7 +156,7 @@ with open('current_galaxy.dat', 'w+') as current:
     print >>current, gal 
     
 RA, DEC, i, PA, c, n, Re, Rd, ue, ud, V, d = read_inputs(galinput)
-PA = PA+90
+PA = PA-70
 
 coor = SkyCoord(RA, DEC)
 
