@@ -111,17 +111,17 @@ def vsigma_uni():
         return Vos, Vos_max, Vos_min, R
         
 def atokpc(R):
-    
+    from astropy.cosmology import WMAP9 as cosmo
     galinput = 'N'+gal+'input.dat'
     galinput = '/home/emilio/MLE/Galaxies/'+gal+'/'+galinput
     inp = [x.split(' ')[0] for x in open(galinput).readlines()]
-    d = float(inp[11])
-    Dkpc = (d*np.pi*R)/648
+    z = float(inp[11])
+    Dkpc = cosmo.kpc_proper_per_arcmin(z).value*(R/60)
     return Dkpc   
     
 #how to proceed with error propagation with assymetrical errorbars? let's proceed without it for now:
     
-gals = ['2768', '3115']
+gals = ['1023', '2768', '3115']
 
 Vs = []
 Vsmax = []
@@ -165,52 +165,65 @@ Vsmax.append(Vos_max)
 Vsmin.append(Vos_min)
 Rs.append(R)
 
-
-f, ax = plt.subplots(3, 3, sharex=True,sharey=True)
-         
-for i in range(0, 3):   
-    
-    ax[i][0].errorbar(Rs[i], Vs[i], yerr=[Vsmin[i], Vsmax[i]], markerfacecolor='none', markersize=10, ecolor='purple', markeredgecolor='purple', marker='o', linestyle='none')
+f, ax = plt.subplots(4, 3, sharex=True,sharey=True)
+loc = plticker.MultipleLocator(base = 1.1)
+loc2 = plticker.MultipleLocator(base = 5.0)      
+for i in range(0, 4):   
+    ax[i][0].errorbar(Rs[i], Vs[i], yerr=[Vsmin[i], Vsmax[i]], markerfacecolor='none', markersize=10, ecolor='purple', markeredgecolor='purple', marker='o', linestyle='none', mew=2)
     ax[i][0].set_ylim(0.0, 5.0)
-
-for i in range(0, 2):
-
-    ax[i][1].errorbar(Rsreds[i], Vsreds[i], yerr=[Vsredsmin[i], Vsredsmax[i]], markerfacecolor='none',ecolor='red', markersize=10,markeredgecolor='red', marker='o', linestyle='none')
+    if i != 3:
+        plt.setp(ax[i][0].get_xticklabels(), visible=False)    
+for i in range(0, 3):
+    ax[i][1].errorbar(Rsreds[i], Vsreds[i], yerr=[Vsredsmin[i], Vsredsmax[i]], markerfacecolor='none',ecolor='red', markersize=10,markeredgecolor='red', marker='o', linestyle='none', mew=2)
+    if i != 2:
+        plt.setp(ax[i][1].get_xticklabels(), visible=False)
+    plt.setp(ax[i][1].get_yticklabels(), visible=False) 
     
-for i in range(0, 2):
+for i in range(0, 3):
+    ax[i][2].errorbar(Rsblues[i], Vsblues[i], yerr=[Vsbluesmin[i], Vsbluesmax[i]], markerfacecolor='none',ecolor='blue', markersize=10,markeredgecolor='blue', marker='o', linestyle='none', mew=2)
+    if i != 2:    
+        plt.setp(ax[i][2].get_xticklabels(), visible=False) 
+    plt.setp(ax[i][2].get_yticklabels(), visible=False)     
     
-    ax[i][2].errorbar(Rsblues[i], Vsblues[i], yerr=[Vsbluesmin[i], Vsbluesmax[i]], markerfacecolor='none',ecolor='blue', markersize=10,markeredgecolor='blue', marker='o', linestyle='none')
-    
-plt.setp(ax[0][0].get_xticklabels(), visible=False)  
-plt.setp(ax[0][1].get_xticklabels(), visible=False)
-plt.setp(ax[0][1].get_yticklabels(), visible=False) 
-plt.setp(ax[1][1].get_yticklabels(), visible=False)
-plt.setp(ax[1][2].get_yticklabels(), visible=False) 
-plt.setp(ax[1][1].get_xticklabels(), visible=True)
-plt.setp(ax[1][2].get_xticklabels(), visible=True)  
-plt.setp(ax[0][2].get_xticklabels(), visible=False)
-plt.setp(ax[0][2].get_yticklabels(), visible=False) 
+#plt.setp(ax[0][0].get_xticklabels(), visible=False)  
+#plt.setp(ax[0][1].get_xticklabels(), visible=False)
+#plt.setp(ax[0][1].get_yticklabels(), visible=False) 
+#plt.setp(ax[1][1].get_yticklabels(), visible=False)
+#plt.setp(ax[1][2].get_yticklabels(), visible=False) 
+#plt.setp(ax[1][1].get_xticklabels(), visible=True)
+#plt.setp(ax[1][2].get_xticklabels(), visible=True)  
+#plt.setp(ax[0][2].get_xticklabels(), visible=False)
+#plt.setp(ax[0][2].get_yticklabels(), visible=False) 
 loc = plticker.MultipleLocator(base = 1.1)
 loc2 = plticker.MultipleLocator(base = 5.0)
 
-
 ax[1][0].set_ylabel('$V/\sigma$', fontsize=20)
 
-ax[1][2].set_xlabel('$R(kpc)$', fontsize=20)
-ax[2][0].set_xlabel('$R(kpc)$', fontsize=20)
-ax[1][1].set_xlabel('$R(kpc)$', fontsize=20)
-
+ax[3][0].set_xlabel('$R(kpc)$', fontsize=20)
+ax[2][1].set_xlabel('$R(kpc)$', fontsize=20)
+ax[2][2].set_xlabel('$R(kpc)$', fontsize=20)
 
 for i in range(0, 3):
     #ax[0][i].set_ylim(-1, 4)
     ax[0][i].yaxis.set_major_locator(loc)
     ax[0][i].xaxis.set_major_locator(loc2)
-    ax[0][i].set_xticks((5, 10, 15, 20))
+    ax[0][i].set_xticks((5, 10, 15, 20))    
     ax[0][i].minorticks_on()
+
+plt.setp(ax[2][1].get_xticklabels(), visible=True)
+plt.setp(ax[2][2].get_xticklabels(), visible=True)
+ax[0][2].text(0.5, 0.8, 'NGC 1023', transform = ax[0][2].transAxes)
+ax[1][2].text(0.5, 0.8, 'NGC 2768', transform = ax[1][2].transAxes)
+ax[2][2].text(0.5, 0.8, 'NGC 3115', transform = ax[2][2].transAxes)
+ax[3][0].text(0.5, 0.8, 'NGC 7457', transform = ax[3][0].transAxes)
+ax[0][0].text(0.2, 0.8, 'All GCs', transform = ax[0][0].transAxes, fontsize=9)  
+ax[0][1].text(0.2, 0.8, 'Red GCs', transform = ax[0][1].transAxes, fontsize=9) 
+ax[0][2].text(0.2, 0.8, 'Blue GCs', transform = ax[0][2].transAxes, fontsize=9)
+
 
 plt.subplots_adjust(hspace=.0001)
 plt.subplots_adjust(wspace=.0001)
-f.delaxes(ax[2][1])
-f.delaxes(ax[2][2])
+f.delaxes(ax[3][1])
+f.delaxes(ax[3][2])
 plt.savefig('vsigma.png', dpi=300, format='png')
 plt.show()

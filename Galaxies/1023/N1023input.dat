@@ -9,3 +9,5 @@
 13.54            #mu_e
 17.00            #mu_d
 637             #mean velocity (from NED) (km/s)
+0.002125          #redshift z
+30               #effective radius, must change

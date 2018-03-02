@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-mpl.rcParams['font.size']=14
-mpl.rcParams['legend.markerscale']=2.0
+mpl.rcParams['font.size']=30
+mpl.rcParams['legend.markerscale']=3.0
 from astropy.io import fits
 from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
@@ -51,26 +51,41 @@ def get_rej():
     RA = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(0,))
     DEC = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(1,))
     like = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(8,))
+    V = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(4,))
+    colf = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(7,))
     
     RArej = []
     DECrej = []
     RAc = []
-    DECc = []    
+    DECc = []
+    Vrej = []
+    Vconf = []   
+    colrej = []
     
     for i in range(0, len(RA)):
         if like[i]==5.00:
             RArej.append(RA[i])
             DECrej.append(DEC[i])
+            Vrej.append(V[i])
+            colrej.append(colf[i])
         else:
             RAc.append(RA[i])
             DECc.append(DEC[i])
+            Vconf.append(V[i])
 
+    with open('rej_cat3115.dat', 'w') as rejcat:
+            for i in range(0, len(RArej)):
+                print >>rejcat, RArej[i], DECrej[i], Vrej[i], colrej[i]
+            
+    plt.hist(colrej, alpha=1)
+    plt.hist(colf, alpha=0.2)
+    plt.show()        
     RArej = np.asarray(RArej)
     DECrej = np.asarray(DECrej)
     RAc = np.asarray(RAc)
     DECc = np.asarray(DECc)
 
-    return RArej, DECrej, RAc, DECc
+    return RArej, DECrej, RAc, DECc, Vrej, Vconf
 
 gal = raw_input('Enter the galaxy number: ')
 galinput = galaxy_inputs(gal)
@@ -100,7 +115,7 @@ if op3 == 'y':
     ra_star = []
     dec_star = []
 if op4 == 'y':
-    RAr, DECr, RAgc, DECgc = get_rej()
+    RAr, DECr, RAgc, DECgc, v_rej, v_conf = get_rej()
     coordsGCrej = zip(RAr, DECr)
     coordsGCconf = zip(RAgc, DECgc)
     ra_rej = []
@@ -152,16 +167,16 @@ if op == 'y' and op2 == 'y' and op3 == 'y':
     plt.plot(ra, dec, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='magenta', label='GCs')
     plt.plot(ra_star, dec_star, marker='s', color='orange', markeredgewidth=1, markeredgecolor='orange',markerfacecolor='None', linestyle='none', label='Stars')
     plt.plot(ra_pne, dec_pne, marker='o', markeredgewidth=1,markeredgecolor='green',markerfacecolor='None',linestyle='none', label='PNe')
-    plt.legend(loc='lower right')
-    plt.xlabel('RA')
-    plt.ylabel('DEC')
+    plt.legend(loc='lower right', numpoints=1, fontsize=500)
+    plt.xlabel('RA', fontsize=500)
+    plt.ylabel('DEC', fontsize=500)
     plt.show()
 
 if op == 'y' and op2 == 'y' and op3 != 'y':
     allgc = plt.subplot(1,1,1, projection=wcs)
     plt.imshow(hdu.data, origin='lower',cmap='gray_r') 
-    plt.plot(ra, dec, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=3, markeredgecolor='magenta', label='GCs')
-    plt.plot(ra_pne, dec_pne, marker='o', markeredgewidth=2,markeredgecolor='green',markerfacecolor='None',linestyle='none', label='PNe')
+    plt.plot(ra, dec, marker='o', ms=10,markerfacecolor='None', linestyle='none', markeredgewidth=3, markeredgecolor='magenta', label='GCs')
+    plt.plot(ra_pne, dec_pne, marker='o', ms=10, markeredgewidth=2,markeredgecolor='green',markerfacecolor='None',linestyle='none', label='PNe')
     plt.legend(loc='lower right', numpoints=1)
     plt.xlabel('RA')
     plt.ylabel('DEC')
@@ -188,9 +203,12 @@ if op == 'y' and op2 != 'y' and op3 != 'y':
 if op4=='y':
     allgc = plt.subplot(1,1,1, projection=wcs)
     plt.imshow(hdu.data, origin='lower',cmap='gray_r') #you can change the contrast in the cmap options.
-    plt.plot(ra_conf, dec_conf, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='black', label='All GCs')
-    plt.plot(ra_rej, dec_rej, marker='h',ms=8,markerfacecolor='red', linestyle='none', markeredgewidth=1, markeredgecolor='white', label='Rejected GCs')    
-    plt.legend(loc='lower right', prop={'size':10})
+    #plt.plot(ra_conf, dec_conf, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='black', label='All GCs')
+    plt.scatter(ra_rej, dec_rej, c=v_rej, marker='h', s=60, label='Rejected GCs', vmin=min(v_rej)+350, vmax=max(v_rej)-150)    
+    #plt.scatter(ra_conf, dec_conf, c=v_conf, marker='h', s=60, label='Rejected GCs', vmin=min(v_rej), vmax=max(v_rej))
+    #plt.legend(loc='lower right', prop={'size':10}, numpoints=1)
+    cb = plt.colorbar(fraction=0.05)
+    cb.set_label('$Velocity $(km/s)')
     plt.xlabel('RA')
     plt.ylabel('DEC')
     plt.show()
