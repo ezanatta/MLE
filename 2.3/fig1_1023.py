@@ -62,6 +62,10 @@ def get_rej():
     Vconf = []   
     colrej = []
     
+    Vari = []
+    Rari = []
+    DECari = []
+
     for i in range(0, len(RA)):
         if like[i]==5.00:
             RArej.append(RA[i])
@@ -76,16 +80,27 @@ def get_rej():
     with open('rej_cat3115.dat', 'w') as rejcat:
             for i in range(0, len(RArej)):
                 print >>rejcat, RArej[i], DECrej[i], Vrej[i], colrej[i]
-            
-    plt.hist(colrej, alpha=1)
-    plt.hist(colf, alpha=0.2)
-    plt.show()        
+    
+    for i in range(0,len(Vrej)):
+        if Vrej[i] < 663:
+            Vari.append(Vrej[i])
+            Rari.append(RArej[i])
+            DECari.append(DECrej[i])
+    print len(Vari)
+
+    #plt.hist(colrej, alpha=1)
+    #plt.hist(colf, alpha=0.2)
+    #plt.show()        
     RArej = np.asarray(RArej)
     DECrej = np.asarray(DECrej)
     RAc = np.asarray(RAc)
     DECc = np.asarray(DECc)
 
-    return RArej, DECrej, RAc, DECc, Vrej, Vconf
+    Rari = np.asarray(Rari)
+    DECari = np.asarray(DECari)
+    Vari = np.asarray(Vari)
+
+    return RArej, DECrej, RAc, DECc, Vrej, Vconf, Rari, DECari, Vari
 
 gal = raw_input('Enter the galaxy number: ')
 galinput = galaxy_inputs(gal)
@@ -115,13 +130,16 @@ if op3 == 'y':
     ra_star = []
     dec_star = []
 if op4 == 'y':
-    RAr, DECr, RAgc, DECgc, v_rej, v_conf = get_rej()
+    RAr, DECr, RAgc, DECgc, v_rej, v_conf, RArari, DECrari, Vrari = get_rej()
     coordsGCrej = zip(RAr, DECr)
     coordsGCconf = zip(RAgc, DECgc)
+    coordsGCari = zip(RArari, DECrari)
     ra_rej = []
     dec_rej = []
     ra_conf = []
     dec_conf = []
+    ra_ari = []
+    dec_ari = []
 
 fits_file = '/home/emilio/MLE/Galaxies/'+gal+'/'+'fits-null.fits'
 hdu = fits.open(fits_file)[0]
@@ -136,7 +154,7 @@ if op2 == 'y':
 if op4 == 'y':
     pix_rej = wcs.wcs_world2pix(coordsGCrej, 1)
     pix_conf = wcs.wcs_world2pix(coordsGCconf, 1)                   #This is done using the WCS loaded before.
-                                                            #so it is important that the fits you used had the WCS.
+    pix_ari = wcs.wcs_world2pix(coordsGCari, 1)                                                        #so it is important that the fits you used had the WCS.
 
 #if you really need to use a fits file without WCS (like when you plot the f-map), check how it is done in gen_cat.py
 if op == 'y':
@@ -158,7 +176,9 @@ if op4 == 'y':
     for i in range(0, len(pix_conf)):
         ra_conf.append(pix_conf[i][0])
         dec_conf.append(pix_conf[i][1])
-
+    for i in range(0, len(pix_ari)):
+        ra_ari.append(pix_ari[i][0])
+        dec_ari.append(pix_ari[i][1])
 
 
 if op == 'y' and op2 == 'y' and op3 == 'y':
@@ -205,6 +225,7 @@ if op4=='y':
     plt.imshow(hdu.data, origin='lower',cmap='gray_r') #you can change the contrast in the cmap options.
     #plt.plot(ra_conf, dec_conf, marker='o',markerfacecolor='None', linestyle='none', markeredgewidth=1, markeredgecolor='black', label='All GCs')
     plt.scatter(ra_rej, dec_rej, c=v_rej, marker='h', s=60, label='Rejected GCs', vmin=min(v_rej)+350, vmax=max(v_rej)-150)    
+    plt.plot(ra_ari, dec_ari, color='red', marker='x', ms=40)
     #plt.scatter(ra_conf, dec_conf, c=v_conf, marker='h', s=60, label='Rejected GCs', vmin=min(v_rej), vmax=max(v_rej))
     #plt.legend(loc='lower right', prop={'size':10}, numpoints=1)
     cb = plt.colorbar(fraction=0.05)
