@@ -24,7 +24,7 @@ galinput = 'N'+gal+'input.dat'
 galinput = '/home/emilio/MLE/Galaxies/'+gal+'/'+galinput
 
 if op == 'GC':
-    galcat = 'N'+gal+'GCphot.dat'    
+    galcat = 'N'+gal+'GC.dat'    
 else:
     galcat = 'N'+gal+'PNE.dat'
 

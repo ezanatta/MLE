@@ -194,7 +194,7 @@ for i in range(0, 3):
 #plt.setp(ax[1][2].get_xticklabels(), visible=True)  
 #plt.setp(ax[0][2].get_xticklabels(), visible=False)
 #plt.setp(ax[0][2].get_yticklabels(), visible=False) 
-loc = plticker.MultipleLocator(base = 1.1)
+loc = plticker.MultipleLocator(base = 1.0)
 loc2 = plticker.MultipleLocator(base = 5.0)
 
 ax[1][0].set_ylabel('$V/\sigma$', fontsize=20)
@@ -207,6 +207,7 @@ for i in range(0, 3):
     #ax[0][i].set_ylim(-1, 4)
     ax[0][i].yaxis.set_major_locator(loc)
     ax[0][i].xaxis.set_major_locator(loc2)
+    ax[0][i].set_yticks((1, 2, 3, 4))
     ax[0][i].set_xticks((5, 10, 15, 20))    
     ax[0][i].minorticks_on()
 

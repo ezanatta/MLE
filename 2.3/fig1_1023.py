@@ -195,8 +195,8 @@ if op == 'y' and op2 == 'y' and op3 == 'y':
 if op == 'y' and op2 == 'y' and op3 != 'y':
     allgc = plt.subplot(1,1,1, projection=wcs)
     plt.imshow(hdu.data, origin='lower',cmap='gray_r') 
-    plt.plot(ra, dec, marker='o', ms=10,markerfacecolor='None', linestyle='none', markeredgewidth=3, markeredgecolor='magenta', label='GCs')
-    plt.plot(ra_pne, dec_pne, marker='o', ms=10, markeredgewidth=2,markeredgecolor='green',markerfacecolor='None',linestyle='none', label='PNe')
+    plt.plot(ra, dec, marker='D', ms=15,markerfacecolor='None', linestyle='none', markeredgewidth=3, markeredgecolor='magenta', label='GCs')
+    plt.plot(ra_pne, dec_pne, marker='o', ms=15, markeredgewidth=2,markeredgecolor='green',markerfacecolor='None',linestyle='none', label='PNe')
     plt.legend(loc='lower right', numpoints=1)
     plt.xlabel('RA')
     plt.ylabel('DEC')

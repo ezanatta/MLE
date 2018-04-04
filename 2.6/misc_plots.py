@@ -88,6 +88,7 @@ gal = ['N1023', 'N2768', 'N3115', 'N7457']
 bt = np.array([0.53, 0.71, 0.74, 0.30])
 mass = np.array([10.99,11.21,10.93,10.13])
 mass_nolog = 10**mass
+mass_nolog = mass_nolog/(10**(9))
 vs = np.array([5.3,3.3,3.3,3.7])
 vserr_max = np.array([0.8,0.6,0.6,0.6])
 vserr_min = np.array([0.7,0.6,0.7,0.7])
@@ -127,7 +128,7 @@ fill=['none', 'full', 'none', 'full']
 
 fig, ax = plt.subplots()
 ax.set_xlabel('B/T', fontsize=20)
-ax.set_ylabel('$N_{GC}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(bt, nb, mark, fill, gal):
     ax.plot([x], [y], marker=m, fillstyle='full', color='black', label=g, linestyle='none', markersize=10)
 for x, y, m, f in zip(bt, nd, mark, fill):
@@ -140,7 +141,7 @@ plt.show()
 
 fig, ax = plt.subplots()
 ax.set_xlabel('B/T', fontsize=20)
-ax.set_ylabel('$N_{GC}^{Red, Sph}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}^{Red, Sph}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(bt, rb, mark, fill, gal):
     ax.plot([x], [y], marker=m, fillstyle=f, color='red', label=g, linestyle='none', markersize=10)
 leg = ax.legend(numpoints=1, frameon=False, fontsize=10, loc='upper left')
@@ -151,7 +152,7 @@ plt.show()
 
 fig, ax = plt.subplots()
 ax.set_xlabel('B/T', fontsize=20)
-ax.set_ylabel('$N_{GC}^{Sph}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}^{Sph}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(bt, bb, mark, fill, gal):
     if g != 'N7457':
         ax.plot([x], [y], marker=m, fillstyle=f, color='black', label=g, linestyle='none', markersize=10)
@@ -167,7 +168,7 @@ plt.show()
 
 fig, ax = plt.subplots()
 ax.set_xlabel('$V/\sigma$', fontsize=20)
-ax.set_ylabel('$N_{GC}^{Red,Sph}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}^{Red,Sph}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(vs, rb, mark, fill, gal):
     ax.plot([x], [y], marker=m, fillstyle=f, color='red', label=g, linestyle='none', markersize=10)   
 #for x, y, m, f in zip(vs, nd, mark, fill):
@@ -178,7 +179,7 @@ plt.show()
 
 fig, ax = plt.subplots()
 ax.set_xlabel('$V/\sigma$', fontsize=20)
-ax.set_ylabel('$N_{GC}^{Sph}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}^{Sph}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(vs, nb, mark, fill, gal):
     ax.plot([x], [y], marker=m, fillstyle=f, color='magenta', label=g, linestyle='none', markersize=10)   
 #for x, y, m, f in zip(vs, nd, mark, fill):
@@ -189,7 +190,7 @@ plt.show()
 
 fig, ax = plt.subplots()
 ax.set_xlabel('$V/\sigma$', fontsize=20)
-ax.set_ylabel('$N_{GC}^{Disk}/M_{*}$', fontsize=20)
+ax.set_ylabel('$N_{GC}^{Disk}/(M_{*}/10^9 M_\odot)$', fontsize=20)
 for x, y, m, f, g in zip(vs, nd, mark, fill, gal):
     ax.plot([x], [y], marker=m, fillstyle=f, color='green', label=g, linestyle='none', markersize=10)   
 #for x, y, m, f in zip(vs, nd, mark, fill):

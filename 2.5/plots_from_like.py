@@ -302,8 +302,17 @@ def load_twocompPNE2():
         return V, Verr_min, Verr_max, sigma, sigmaerr_min, sigmaerr_max, R, Rmin, Rmax, sigma_b, sigma_b_err_min, sigma_b_err_max
         
 def atokpc(R, d):
-    Dkpc = (d.value*np.pi*R)/648
-    return Dkpc
+    from astropy.cosmology import WMAP9 as cosmo
+    if gal == '2768':
+        z = 0.004513
+    elif gal == '7457':
+        z = 0.002815
+    elif gal == '3115':
+        z = 0.002212
+    
+    Dkpc = cosmo.kpc_proper_per_arcmin(z).value*(R/60)
+    
+    return Dkpc  
 
 RA, DEC, ins = read_gc(gal)  
 d = ins[4]
@@ -324,7 +333,7 @@ if op=='y':
     plot1 = plt.subplot(2, 1, 1)
 #    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
 #    plt.plot((0,16), (v,v), 'k--', lw=0.5)
-    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None', label='PNe')    
+    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], markeredgecolor='green', linestyle='None', label='PNe', mfc='None', ecolor='green')    
     plt.errorbar(gR, gV, marker='o', xerr=[gRmin, gRmax], yerr=[gVerr_min, gVerr_max], color='purple', linestyle='None', label='All GCs') 
     plt.ylabel('V (km/s)', fontdict=font)
     plt.ylim(0, 250)
@@ -334,13 +343,13 @@ if op=='y':
     plot4 = plt.subplot(2, 1, 2)
 #    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
 #    plt.plot((0,16), (s,s), 'k--', lw=0.5)
-    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
+    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], mec='green', linestyle='None', mfc='None', ecolor='green')
     plt.errorbar(gR, gsigma ,marker='o', xerr=[gRmin, gRmax], yerr=[gsigmaerr_min, gsigmaerr_max], color='purple', linestyle='None')
     #plt.plot((0,16), (ins[6],ins[6]), 'k--')
     plt.ylabel('$\sigma$ (km/s)', fontdict=font)
     plt.xlabel('R ($kpc$)', fontdict=font)
     plt.ylim(0, 80)
-    plt.xlim(0, 16)    
+    plt.xlim(0, 10)    
     
     loc = plticker.MultipleLocator(base = 5.0)
     loc2 = plticker.MultipleLocator(base = 40.0)
@@ -414,7 +423,7 @@ else:
     plot1 = plt.subplot(2, 3, 1)
 #    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)
-    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None', label='PNe') 
+    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max],ecolor='green', mfc='None', mec='green', linestyle='None', label='PNe') 
     plt.errorbar(R, V, marker='o', xerr=[Rmin, Rmax], yerr=[Verr_min, Verr_max], color='purple', linestyle='None', label='All GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')   
     plt.ylabel('V (km/s)', fontdict=font)
@@ -425,7 +434,7 @@ else:
     plot2 = plt.subplot(2, 3, 2)
 #    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)    
-    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
+    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max],ecolor='green', mfc='None', mec='green', linestyle='None') 
     plt.errorbar(R_r, V_r,marker='o', xerr=[Rmin_r, Rmax_r], yerr=[Verr_r_min, Verr_r_max], color='red', linestyle='None', label='Red GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
@@ -435,7 +444,7 @@ else:
     plot3 = plt.subplot(2, 3, 3)
 #    plt.fill_between(xaux, v-vmin, v+vmax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (v,v), 'k--', lw=0.5)    
-    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max], color='green', linestyle='None') 
+    plt.errorbar(pR, pV, marker='o', xerr=[pRmin, pRmax], yerr=[pVerr_min, pVerr_max],ecolor='green', mfc='None', mec='green', linestyle='None') 
     plt.errorbar(R_b, V_b,marker='o', xerr=[Rmin_b, Rmax_b], yerr=[Verr_b_min, Verr_b_max], color='blue', linestyle='None', label='Blue GCs')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
@@ -445,7 +454,7 @@ else:
     plot4 = plt.subplot(2, 3, 4)
 #    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
-    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
+    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max],ecolor='green', mfc='None', mec='green', linestyle='None')
     plt.errorbar(R, sigma,marker='o', xerr=[Rmin, Rmax], yerr=[sigmaerr_min, sigmaerr_max], color='purple', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylabel('$\sigma$ (km/s)', fontdict=font)
@@ -455,7 +464,7 @@ else:
     plot5 = plt.subplot(2, 3, 5)
 #    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
-    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
+    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max],ecolor='green', mfc='None', mec='green', linestyle='None')
     plt.errorbar(R_r, sigma_r,marker='o', xerr=[Rmin_r, Rmax_r], yerr=[sigmaerr_r_min, sigmaerr_r_max], color='red', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.xlabel('R (kpc)', fontdict=font)
@@ -465,7 +474,7 @@ else:
     plot6 = plt.subplot(2, 3, 6)
 #    plt.fill_between(xaux, s-smin, s+smax, color='gray', alpha=0.2)
 #    plt.plot((0,xmax), (s,s), 'k--', lw=0.5)    
-    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max], color='green', linestyle='None')
+    plt.errorbar(pR, psigma ,marker='o', xerr=[pRmin, pRmax], yerr=[psigmaerr_min, psigmaerr_max],ecolor='green', mfc='None', mec='green', linestyle='None')
     plt.errorbar(R_b, sigma_b,marker='o', xerr=[Rmin_b, Rmax_b], yerr=[sigmaerr_b_min, sigmaerr_b_max], color='blue', linestyle='None')
     #plt.plot((ins[6],ins[6]), (0,450), 'k--')
     plt.ylim(0, 450)
@@ -497,7 +506,7 @@ else:
     
     plt.subplots_adjust(hspace=.0001)
     plt.subplots_adjust(wspace=.0001)
-    plt.savefig('2768like.png', dpi=300)
+    plt.savefig(gal+'like.png', dpi=300)
     plt.show()
 ########################################## new plot
     
