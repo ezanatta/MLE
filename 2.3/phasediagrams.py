@@ -161,7 +161,26 @@ if op == 'y' and op2 == 'y':
     ys = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(3,))
     colf = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(7,))
     like = np.loadtxt('/home/emilio/MLE/2.5/N'+gal+'/prob_out.dat', usecols=(8,))
-    
+   
+    if gal=='7457':
+        colf = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(5,))
+        RA = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(1,))
+        DEC = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(2,))
+        xs = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(9,))
+        ys = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(10,))
+        fb = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(12,))
+        like = np.loadtxt('../2.5/N7457/prob_out_7457.dat', usecols=(15,))
+
+        print RA
+        print '---'
+        print DEC
+        print '---'
+        print colf
+        print '---'
+        print fb
+        print '---'
+        print like
+
     opp = 0.0*u.deg
     while opp!='-1':    
     
@@ -207,6 +226,8 @@ if op == 'y' and op2 == 'y':
     colrej = np.asarray(colrej)
     vrej = np.asarray(vrej)                
     
+    #if c_sep != -1000:
+        
 
     rred = []
     rblue = []
@@ -218,7 +239,7 @@ if op == 'y' and op2 == 'y':
     xsred = []
     xsblue = []
     
-    for i in range(0, len(r)):
+    for i in range(0, len(colf)):
         if colf[i] >= c_sep:
             rred.append(np.sqrt(xs[i]**2+ys[i]**2))
             Vred.append(vfb[i])
@@ -374,12 +395,13 @@ if op == 'y' and op2 == 'y':
         
         fig3 = plt.subplot(1, 1, 1)
         plt.scatter(colf, np.sqrt(xs**2+ys**2), c=fb, cmap='Greys_r', vmin=0.0, vmax=1.0, s=50)
-        for i in range(0, len(colrej)):
-            fig3.plot(colrej[i], np.sqrt(xrej[i]**2+yrej[i]**2),color='red', marker='x', markersize=10,linestyle='None',mew=4, label='Rejected GC')    
-        fig3.set_xlabel('($R_{c}$-z)(mag)')
-        fig3.set_ylabel('R$(kpc)$')
+#        for i in range(0, len(colrej)):
+#            fig3.plot(colrej[i], np.sqrt(xrej[i]**2+yrej[i]**2),color='red', marker='x', markersize=10,linestyle='None',mew=4, label='Rejected GC')    
+        fig3.set_xlabel('(B-V) (mag)', fontsize=20)
+        fig3.set_ylabel('R (kpc)', fontsize=20)
+        fig3.set_ylim(0,12)
         cb = plt.colorbar(fraction=0.05)
-        cb.set_label('$L_{Sph}(v_{i}, f_{i})$')
+        cb.set_label('$L_{Sph}(v_{i}, f_{i})$', fontsize=20)
         plt.savefig(gal+'rcolf.png', dpi=300)
         plt.show()
         

@@ -114,6 +114,7 @@ redGCdensfile = '/home/emilio/MLE/2.2/test_GCdensity-REDS.dat'
 blueGCdensfile = '/home/emilio/MLE/2.2/test_GCdensity-BLUES.dat'
 
 GCdens, GCdenserr, rgc, binsize_gc = read_catalog(GCdensfile)
+GCdens = (10**GCdens)/(-2.5)
 
 if c_sep != -1000:
     redGCdens, redGCdenserr, rgc_reds, binsize_gc_reds = read_catalog(redGCdensfile)
